@@ -10,6 +10,6 @@ pip install pyqt6-tools
 
 C:\PythonXX\Lib\site-packages\qt6_applications\Qt\bin\designer.exe
 pyuic6 -x nome_do_arquivo.ui -o nome_do_arquivo.py
-pyuic6 -x vm_selector.ui -o vm_selector.py
-pyuic6 -x draw_window.ui -o draw_window.py
+pyuic6 -x vmSelector.ui -o vmSelector.py
+pyuic6 -x drawWindow.ui -o drawWindow.py
 
