@@ -1,0 +1,10 @@
+Metadata-Version: 2.1
+Name: vboxapi
+Version: 1
+Summary: Python interface to VirtualBox
+Home-page: https://www.virtualbox.org
+Author: Oracle Corp.
+Author-email: "Oracle Corp." <vbox-dev@virtualbox.org>
+Project-URL: Homepage, https://www.virtualbox.org
+Project-URL: Repo, https://www.virtualbox.org/svn/vbox/
+Project-URL: Issues, https://www.virtualbox.org/wiki/Bugtracker
