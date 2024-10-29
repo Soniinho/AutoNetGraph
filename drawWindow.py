@@ -23,6 +23,8 @@ class Ui_DrawWindow(object):
         self.graphicsView = QtWidgets.QGraphicsView(parent=self.centralwidget)
         self.graphicsView.setGeometry(QtCore.QRect(0, 30, 631, 391))
         self.graphicsView.setObjectName("graphicsView")
+
+        self.graphicsView.setViewportUpdateMode(QtWidgets.QGraphicsView.ViewportUpdateMode.FullViewportUpdate)
         
         # Adicionando cena gráfica à QGraphicsView
         self.scene = QGraphicsScene()
