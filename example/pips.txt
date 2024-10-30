@@ -1,12 +1,11 @@
-cd VBOX_INSTALL_PATH/sdk/installer
+cd VBOX_INSTALL_PATH/sdk/installer/python
 python vboxapisetup.py install
 
-pip install PyQt6
 pip install pywin32
 
--------------------------------------------------------------------------------
+pip install PyQt6 pyqt6-tools
 
-pip install pyqt6-tools
+-------------------------------------------------------------------------------
 
 C:\PythonXX\Lib\site-packages\qt6_applications\Qt\bin\designer.exe
 
