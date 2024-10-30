@@ -1,9 +1,0 @@
-pyproject.toml
-setup.py
-src/vboxapi/VirtualBox_constants.py
-src/vboxapi/__init__.py
-src/vboxapi.egg-info/PKG-INFO
-src/vboxapi.egg-info/SOURCES.txt
-src/vboxapi.egg-info/dependency_links.txt
-src/vboxapi.egg-info/requires.txt
-src/vboxapi.egg-info/top_level.txt
