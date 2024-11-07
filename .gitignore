@@ -1,6 +1,6 @@
-/.venv
-/__pycache__
-/sdk
-/build
-/dist
-*.spec
+**/.venv
+**/__pycache__
+**/sdk
+**/build
+**/dist
+**/*.spec
