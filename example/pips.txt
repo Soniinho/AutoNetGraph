@@ -1,4 +1,4 @@
-cd VBOX_INSTALL_PATH/sdk/installer/python
+cd sdk/installer/python
 python vboxapisetup.py install
 
 pip install pywin32
@@ -13,3 +13,9 @@ pyuic6 -x nome_do_arquivo.ui -o nome_do_arquivo.py
 pyuic6 -x vmSelector.ui -o vmSelector.py
 pyuic6 -x drawWindow.ui -o drawWindow.py
 
+-------------------------------------------------------------------------------
+
+pip install pyinstaller
+
+pyinstaller --onefile --add-data "sdk:sdk" vmSelector.py
+pyinstaller --onefile --noconsole --add-data "sdk:sdk" vmSelector.py
