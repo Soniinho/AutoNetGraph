@@ -3,7 +3,14 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPen, QBrush, QFont
 from PyQt6.QtWidgets import QMainWindow, QGraphicsScene, QGraphicsView, QPushButton, QHBoxLayout, QVBoxLayout, QWidget, QGraphicsEllipseItem, QGraphicsRectItem, QGraphicsLineItem, QGraphicsTextItem, QMenu, QDialog, QFormLayout, QLineEdit, QComboBox, QDialogButtonBox
 
-from nodes import NetworkShape ,MovableEllipse, MovableRect, ConnectionLine
+from nodes import NetworkShape, MovableEllipse, MovableRect, ConnectionLine
+
+import sys
+import os
+# Caminho relativo para a pasta do VirtualBox SDK
+sdk_path = os.path.join(os.path.dirname(__file__), 'sdk/bindings/xpcom/python')
+sys.path.append(sdk_path)
+import vboxapi
 
 class Ui_DrawInterface(object):
     def __init__(self, selected_vm):
@@ -24,11 +31,11 @@ class Ui_DrawInterface(object):
         button_layout = QHBoxLayout()
         
         # Buttons
-        self.button_circle = QPushButton("Círculo", self.centralwidget)
-        self.button_rectangle = QPushButton("Retângulo", self.centralwidget)
-        self.button_line = QPushButton("Linha", self.centralwidget)
+        self.button_computer = QPushButton("Computador", self.centralwidget)
+        self.button_gateway = QPushButton("Gateway", self.centralwidget)
+        self.button_connect = QPushButton("Conectar", self.centralwidget)
         
-        for button in (self.button_circle, self.button_rectangle, self.button_line):
+        for button in (self.button_computer, self.button_gateway, self.button_connect):
             button.setFixedSize(80, 30)
             button_layout.addWidget(button)
         
@@ -40,7 +47,7 @@ class Ui_DrawInterface(object):
         button_layout.addWidget(self.button_clone_machines)
 
         # Conectando o botão a uma função
-        self.button_clone_machines.clicked.connect(self.clone_machines)
+        self.button_clone_machines.clicked.connect(self.generate_files)
         
         # Graphics View
         #self.graphicsView = ZoomableGraphicsView()
@@ -50,9 +57,9 @@ class Ui_DrawInterface(object):
         self.layout.addWidget(self.graphicsView)
         
         # Conectar botões às funções
-        self.button_circle.clicked.connect(self.add_circle)
-        self.button_rectangle.clicked.connect(self.add_rectangle)
-        self.button_line.clicked.connect(self.add_line)
+        self.button_computer.clicked.connect(self.add_computer)
+        self.button_gateway.clicked.connect(self.add_gateway)
+        self.button_connect.clicked.connect(self.add_connect)
 
         DiagramWindow.setCentralWidget(self.centralwidget)
         DiagramWindow.setWindowTitle("Editor de Diagramas")
@@ -67,47 +74,73 @@ class Ui_DrawInterface(object):
         self.graphicsView.setViewportUpdateMode(QGraphicsView.ViewportUpdateMode.FullViewportUpdate)
 
 
-    def add_circle(self):
-        circle = MovableEllipse(0, 0, 50, 50, "192.168.1.10", "enp0s3", "255.255.255.0", "192.168.1.0", "192.168.1.255", ip_forward=0)
-        circle.setBrush(QBrush(Qt.GlobalColor.cyan))
-        circle.setFlags(QGraphicsEllipseItem.GraphicsItemFlag.ItemIsMovable | QGraphicsEllipseItem.GraphicsItemFlag.ItemIsSelectable)
-        self.scene.addItem(circle)
+    def add_computer(self):
+        computer = MovableEllipse(0, 0, 50, 50)
+        computer.setBrush(QBrush(Qt.GlobalColor.cyan))
+        computer.setFlags(QGraphicsEllipseItem.GraphicsItemFlag.ItemIsMovable | QGraphicsEllipseItem.GraphicsItemFlag.ItemIsSelectable)
+        self.scene.addItem(computer)
 
-    def add_rectangle(self):
-        rectangle = MovableRect(0, 0, 70, 50, "192.168.1.20", "enp0s3", "255.255.255.0", "192.168.1.0", "192.168.1.255", ip_forward=1)
-        rectangle.setBrush(QBrush(Qt.GlobalColor.lightGray))
-        rectangle.setFlags(QGraphicsRectItem.GraphicsItemFlag.ItemIsMovable | QGraphicsRectItem.GraphicsItemFlag.ItemIsSelectable)
-        self.scene.addItem(rectangle)
+    def add_gateway(self):
+        gateway = MovableRect(0, 0, 70, 50)
+        gateway.setBrush(QBrush(Qt.GlobalColor.lightGray))
+        gateway.setFlags(QGraphicsRectItem.GraphicsItemFlag.ItemIsMovable | QGraphicsRectItem.GraphicsItemFlag.ItemIsSelectable)
+        self.scene.addItem(gateway)
 
-    def add_line(self):
+    def add_connect(self):
         selected_items = self.scene.selectedItems()
         if len(selected_items) == 2:
             item1, item2 = selected_items
-            line = ConnectionLine(item1, item2)
-            self.scene.addItem(line)
+            connect = ConnectionLine(item1, item2)
+            self.scene.addItem(connect)
 
-    def clone_machines(self):
+    def generate_files(self):
         # Itera sobre todos os itens da cena
         for item in self.scene.items():
             if isinstance(item, NetworkShape):  # Verifica se o item é uma forma com parâmetros de rede
-                # Cria o nome do arquivo com base no IP da forma
-                file_name = f"{item.ip}_properties.txt"
-                
+                # Nome do arquivo baseado no IP da interface enp0s3 ou enp0s8, se disponível
+                # file_name = f"{item.interfaces[0].get('ip', 'sem_ip')}_network_config.txt"
+                file_name = "interfaces"
+               
                 # Abre o arquivo em modo de escrita
                 with open(file_name, "w") as file:
-                    # Escreve os parâmetros da forma no arquivo
-                    file.write(f"IP: {item.ip}\n")
-                    file.write(f"Interface: {item.interface}\n")
-                    file.write(f"Netmask: {item.netmask}\n")
-                    file.write(f"Network: {item.network}\n")
-                    file.write(f"Broadcast: {item.broadcast}\n")
-                    file.write(f"IP Forward: {item.ip_forward}\n")
+                    # Escreve o cabeçalho do arquivo de configuração
+                    file.write("source /etc/network/interfaces.d/*\n\n")
+                    
+                    # Configuração da interface de loopback
+                    file.write("auto lo\n")
+                    file.write("iface lo inet loopback\n\n")
+                    
+                    # Itera sobre cada interface
+                    for iface in item.interfaces:
+                        # Especifica a interface como `auto` para habilitação
+                        file.write(f"auto {iface['name']}\n")
+                        
+                        # Configura a interface com `dhcp` ou `static`
+                        if iface.get("automatic", True):  # Se for automático, utiliza DHCP
+                            file.write(f"iface {iface['name']} inet dhcp\n\n")
+                        else:  # Se for manual, configura como estático
+                            file.write(f"iface {iface['name']} inet static\n")
+                            
+                            # Adiciona os campos conforme a interface
+                            if iface['name'] == "enp0s8":  # enp0s8 com campos padrão e gateway opcional
+                                file.write(f"    address {iface.get('ip', '')}\n")
+                                file.write(f"    netmask {iface.get('netmask', '')}\n")
+                                file.write(f"    network {iface.get('network', '')}\n")
+                                if 'gateway' in iface:
+                                    file.write(f"    gateway {iface.get('gateway', '')}\n")
+                            elif iface['name'] == "enp0s3":  # enp0s3 com broadcast adicional
+                                file.write(f"    address {iface.get('ip', '')}\n")
+                                file.write(f"    netmask {iface.get('netmask', '')}\n")
+                                file.write(f"    network {iface.get('network', '')}\n")
+                                file.write(f"    broadcast {iface.get('broadcast', '')}\n")
+                            
+                            file.write("\n")  # Separador entre as interfaces
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     DrawWindow = QtWidgets.QMainWindow()
-    ui = Ui_DrawInterface()
+    ui = Ui_DrawInterface("Debian 12 https")
     ui.setupUi(DrawWindow)
     DrawWindow.show()
     sys.exit(app.exec())
