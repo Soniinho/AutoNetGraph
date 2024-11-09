@@ -12,7 +12,8 @@ vbox = vbox_mgr.getVirtualBox()
 session = vbox_mgr.getSessionObject(vbox)
 
 # Nome da máquina a ser clonada
-source_vm_name = "Debian 12 https"
+#source_vm_name = "Debian 12 https"
+source_vm_name = "debian 10 seg"
 
 # Nome da nova máquina clonada
 clone_vm_name = "NomeDaVMClone"
@@ -21,10 +22,10 @@ clone_vm_name = "NomeDaVMClone"
 source_vm = vbox.findMachine(source_vm_name)
 
 # Criar a nova máquina clonada (alteração no settingsFilePath para None)
-#clone_vm = vbox.createMachine(None, clone_vm_name, [], source_vm.OSTypeId, "", "", "", "")
+clone_vm = vbox.createMachine(None, clone_vm_name, [], source_vm.OSTypeId, "", "", "", "")
 
 # Adicionar a nova máquina ao VirtualBox
-#vbox.registerMachine(clone_vm)
+vbox.registerMachine(clone_vm)
 
 clone_vm = vbox.findMachine(clone_vm_name)
 # Iniciar o processo de clonagem

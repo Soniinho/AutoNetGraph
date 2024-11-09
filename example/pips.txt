@@ -19,3 +19,7 @@ pip install pyinstaller
 
 pyinstaller --onefile --add-data "sdk:sdk" vmSelector.py
 pyinstaller --onefile --noconsole --add-data "sdk:sdk" main.py
+
+-------------------------------------------------------------------------------
+
+python -m pip install virtualbox
