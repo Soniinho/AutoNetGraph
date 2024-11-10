@@ -5,12 +5,12 @@ from PyQt6.QtWidgets import QMainWindow, QGraphicsScene, QGraphicsView, QPushBut
 
 from nodes import NetworkShape, MovableEllipse, MovableRect, ConnectionLine
 
-import sys
+""" import sys
 import os
 # Caminho relativo para a pasta do VirtualBox SDK
 sdk_path = os.path.join(os.path.dirname(__file__), 'sdk/bindings/xpcom/python')
 sys.path.append(sdk_path)
-import vboxapi
+import vboxapi """
 
 class Ui_DrawInterface(object):
     def __init__(self, selected_vm):

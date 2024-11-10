@@ -29,9 +29,11 @@ vbox.registerMachine(clone_vm)
 
 clone_vm = vbox.findMachine(clone_vm_name)
 # Iniciar o processo de clonagem
-source_vm.lockMachine(session, vboxapi.constants.LockType_Shared)
+#source_vm.lockMachine(session, vboxapi.constants.LockType_Shared)
+source_vm.lockMachine(session, 1)
 try:
-    progress = source_vm.cloneTo(clone_vm, vboxapi.constants.CloneMode_MachineState, [])
+    #progress = source_vm.cloneTo(clone_vm, vboxapi.constants.CloneMode_MachineState, [])
+    progress = source_vm.cloneTo(clone_vm, 1, [])
     progress.waitForCompletion(-1)  # Aguarda o término da clonagem
 finally:
     session.unlockMachine()

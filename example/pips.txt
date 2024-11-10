@@ -1,4 +1,4 @@
-cd sdk/installer/python
+cd sdk/installer
 python vboxapisetup.py install
 
 pip install pywin32
