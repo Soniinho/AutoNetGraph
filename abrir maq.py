@@ -13,7 +13,7 @@ progress = machine.launch_vm_process(session, "gui", [])
 progress.wait_for_completion()
 
 # Aguarda alguns segundos para a máquina inicializar até a tela de login
-time.sleep(30)  # Ajuste o tempo conforme necessário
+time.sleep(40)  # Ajuste o tempo conforme necessário
 
 # Obtém o teclado da máquina virtual
 console = session.console
@@ -40,7 +40,17 @@ keyboard.put_keys("lxterminal")
 keyboard.put_keys(["ENTER"])
 
 time.sleep(1)  # Aguarda o menu abrir
-keyboard.put_keys("poweroff")
-keyboard.put_keys(["ENTER"])
+
+#keyboard.put_keys('echo "" > /etc/network/interfaces\n')
+
+keyboard.put_keys("setxkbmap us\n")
+keyboard.put_keys('echo "" > /etc/network/interfaces\n')
+keyboard.put_keys("setxkbmap br\n")
+
+#keyboard.put_keys("nano /etc/network/interfaces\n")
+
+time.sleep(1)  # Aguarda o menu abrir
+#keyboard.put_keys("poweroff")
+#keyboard.put_keys(["ENTER"])
 #session.console.power_down()
 session.unlock_machine()
