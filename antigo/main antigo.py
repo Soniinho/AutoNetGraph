@@ -1,7 +1,14 @@
+import sys
+import os
+
+# Caminho relativo para a pasta do VirtualBox SDK
+sdk_path = os.path.join(os.path.dirname(__file__), 'sdk/bindings/xpcom/python')
+sys.path.append(sdk_path)
+import vboxapi
+
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 from interface import Ui_DrawInterface  # Importe a nova janela
-import virtualbox
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -45,8 +52,9 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
         # Array de máquinas virtuais
-        vbox = virtualbox.VirtualBox()
-        self.vm_names = [m.name for m in vbox.machines]
+        mgr = vboxapi.VirtualBoxManager(None, None)
+        vbox = mgr.getVirtualBox()
+        self.vm_names = [m.name for m in mgr.getArray(vbox, 'machines')]
         self.populate_list_widget()
 
         # Conectar o botão ao método
