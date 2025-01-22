@@ -5,13 +5,7 @@ pip install pywin32
 
 pip install PyQt6 pyqt6-tools
 
--------------------------------------------------------------------------------
-
-C:\PythonXX\Lib\site-packages\qt6_applications\Qt\bin\designer.exe
-
-pyuic6 -x nome_do_arquivo.ui -o nome_do_arquivo.py
-pyuic6 -x vmSelector.ui -o vmSelector.py
-pyuic6 -x drawWindow.ui -o drawWindow.py
+python -m pip install virtualbox
 
 -------------------------------------------------------------------------------
 
@@ -22,4 +16,13 @@ pyinstaller --onefile --noconsole --add-data "sdk:sdk" main.py
 
 -------------------------------------------------------------------------------
 
-python -m pip install virtualbox
+C:\PythonXX\Lib\site-packages\qt6_applications\Qt\bin\designer.exe
+
+pyuic6 -x nome_do_arquivo.ui -o nome_do_arquivo.py
+pyuic6 -x vmSelector.ui -o vmSelector.py
+pyuic6 -x drawWindow.ui -o drawWindow.py
+
+-------------------------------------------------------------------------------
+
+pip freeze > requirements.txt
+pip install -r requirements.txt
