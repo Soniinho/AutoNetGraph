@@ -4,9 +4,9 @@ import virtualbox
 
 class Ui_MainWindow(object):
     def __init__(self):
-        self.language = "pt"  # Default language is Portuguese
+        self.language = "br"  # Default language is Portuguese
         self.translations = {
-            "pt": {
+            "br": {
                 "title": "Seleção de Máquina Virtual",
                 "label": "Selecione a máquina virtual original, ela será o template de cópia para gerar as máquinas da rede.",
                 "select_button": "Selecionar Máquina",

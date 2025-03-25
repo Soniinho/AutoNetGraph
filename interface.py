@@ -11,7 +11,7 @@ class Ui_DrawInterface(object):
         self.selected_vm = selected_vm
         self.language = language
         self.translations = {
-            "pt": {
+            "br": {
                 "title": "Editor de Diagramas",
                 "computer_button": "Computador",
                 "gateway_button": "Gateway",
@@ -85,13 +85,13 @@ class Ui_DrawInterface(object):
 
 
     def add_computer(self):
-        computer = MovableEllipse(0, 0, 50, 50)
+        computer = MovableEllipse(0, 0, 50, 50, self.language)
         computer.setBrush(QBrush(Qt.GlobalColor.cyan))
         computer.setFlags(QGraphicsEllipseItem.GraphicsItemFlag.ItemIsMovable | QGraphicsEllipseItem.GraphicsItemFlag.ItemIsSelectable)
         self.scene.addItem(computer)
 
     def add_gateway(self):
-        gateway = MovableRect(0, 0, 70, 50)
+        gateway = MovableRect(0, 0, 70, 50, self.language)
         gateway.setBrush(QBrush(Qt.GlobalColor.lightGray))
         gateway.setFlags(QGraphicsRectItem.GraphicsItemFlag.ItemIsMovable | QGraphicsRectItem.GraphicsItemFlag.ItemIsSelectable)
         self.scene.addItem(gateway)
