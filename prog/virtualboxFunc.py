@@ -1,6 +1,7 @@
 from nodes import NetworkShape
 import virtualbox, time
 
+
 def generate_files(self):
         """ Ordenação pelo Z-Value: Os itens com valores de Z menores 
         aparecem antes no loop. Isso reflete a "profundidade" dos 
