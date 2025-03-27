@@ -1,11 +1,11 @@
 from PyQt6 import QtWidgets
 from PyQt6.QtWidgets import QMainWindow, QGraphicsScene, QGraphicsView, QPushButton, QHBoxLayout, QVBoxLayout, QWidget
 
-from translations import TRANSLATIONS
-from virtualboxFunc import cloneConfigureMachines
-from diagram_operations import add_computer, add_gateway, add_connect
-from network_operations import setup_network
-from file_operations import save_diagram, load_diagram
+from prog.translations import TRANSLATIONS
+from prog.virtualboxFunc import cloneConfigureMachines
+from prog.diagram_operations import add_computer, add_gateway, add_connect
+from prog.network_operations import setup_network
+from prog.file_operations import save_diagram, load_diagram
 
 
 class Ui_DrawInterface(object):

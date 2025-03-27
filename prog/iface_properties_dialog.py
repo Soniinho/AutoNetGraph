@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QDialog, QFormLayout, QLineEdit, QComboBox, QDialogButtonBox
 
-from translations import TRANSLATIONS
+from prog.translations import TRANSLATIONS
 
 
 class InterfacePropertiesDialog(QDialog):

@@ -1,8 +1,10 @@
 from PyQt6 import QtWidgets
 
-from nodes import MovableRect, MovableEllipse
+from prog.nodes import MovableRect, MovableEllipse
 
-
+# TODO: quando o setup acontece, ele vai na mesma interface para ambos os gateways
+# TODO: quando é setado para ser automatico, ele põe em manual e preenche os campos escrevendo automático, invés de ignorar
+# TODO: erros fora da tradução
 def setup_network(scene):
     all_items = [item for item in scene.items() if isinstance(item, (MovableRect, MovableEllipse))]
     

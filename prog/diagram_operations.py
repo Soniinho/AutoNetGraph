@@ -3,8 +3,8 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QBrush
 from PyQt6.QtWidgets import QGraphicsEllipseItem, QGraphicsRectItem, QDialog
 
-from nodes import MovableEllipse, MovableRect, ConnectionLine
-from iface_select_dialog import InterfaceSelectionDialog
+from prog.nodes import MovableEllipse, MovableRect, ConnectionLine
+from prog.iface_select_dialog import InterfaceSelectionDialog
 
 
 def add_computer(scene, language):
@@ -19,6 +19,8 @@ def add_gateway(scene, language):
     gateway.setFlags(QGraphicsRectItem.GraphicsItemFlag.ItemIsMovable | QGraphicsRectItem.GraphicsItemFlag.ItemIsSelectable)
     scene.addItem(gateway)
 
+# TODO: erro fora da tradução
+# TODO: conexão entre 2 gateways na msm iface
 def add_connect(scene, language):
     selected_items = scene.selectedItems()
     if len(selected_items) == 2:

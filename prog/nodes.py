@@ -2,8 +2,8 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPen, QFont
 from PyQt6.QtWidgets import QGraphicsEllipseItem, QGraphicsRectItem, QGraphicsLineItem, QGraphicsTextItem, QMenu, QDialog, QFormLayout, QLineEdit, QComboBox, QDialogButtonBox
 
-from iface_properties_dialog import InterfacePropertiesDialog
-from translations import TRANSLATIONS
+from prog.iface_properties_dialog import InterfacePropertiesDialog
+from prog.translations import TRANSLATIONS
 
 
 class NetworkShape:

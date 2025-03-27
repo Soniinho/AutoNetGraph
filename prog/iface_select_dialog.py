@@ -1,5 +1,6 @@
 from PyQt6.QtWidgets import QVBoxLayout, QDialog, QComboBox, QDialogButtonBox
-from translations import TRANSLATIONS
+
+from prog.translations import TRANSLATIONS
 
 
 class InterfaceSelectionDialog(QDialog):

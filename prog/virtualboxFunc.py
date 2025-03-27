@@ -1,7 +1,8 @@
-from nodes import NetworkShape
 import virtualbox, time
 
+from prog.nodes import NetworkShape
 
+# TODO: aumentar tempos entre coisas, e colocar eles como globais
 def generate_files(self):
         """ Ordenação pelo Z-Value: Os itens com valores de Z menores 
         aparecem antes no loop. Isso reflete a "profundidade" dos 
