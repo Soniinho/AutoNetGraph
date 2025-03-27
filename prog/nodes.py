@@ -2,7 +2,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPen, QFont
 from PyQt6.QtWidgets import QGraphicsEllipseItem, QGraphicsRectItem, QGraphicsLineItem, QGraphicsTextItem, QMenu, QDialog, QFormLayout, QLineEdit, QComboBox, QDialogButtonBox
 
-from propertiesDialog import PropertiesDialog
+from iface_properties_dialog import InterfacePropertiesDialog
 from translations import TRANSLATIONS
 
 
@@ -55,7 +55,7 @@ class NetworkShape:
             self.scene().removeItem(self)
 
     def show_properties_dialog(self):
-        dialog = PropertiesDialog(self, self.language)
+        dialog = InterfacePropertiesDialog(self, self.language)
         if dialog.exec() == QDialog.DialogCode.Accepted:
             self.update_properties(dialog)
 

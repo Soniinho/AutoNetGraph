@@ -1,5 +1,5 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
-from interface import Ui_DrawInterface  # Import the second interface
+from prog.visual_interface import Ui_DrawInterface  # Import the second interface
 import virtualbox
 
 
