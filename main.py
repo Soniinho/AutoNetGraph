@@ -1,6 +1,6 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 from prog.visual_interface import Ui_DrawInterface  # Import the second interface
-import virtualbox
+# import virtualbox
 
 
 class Ui_MainWindow(object):
@@ -76,8 +76,9 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
         # Array of virtual machines
-        vbox = virtualbox.VirtualBox()
-        self.vm_names = [m.name for m in vbox.machines]
+        # vbox = virtualbox.VirtualBox()
+        # self.vm_names = [m.name for m in vbox.machines]
+        self.vm_names = ["VM1", "VM2"]
         self.populate_list_widget()
 
         # Connect buttons and dropdown to methods

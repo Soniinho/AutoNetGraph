@@ -72,7 +72,7 @@ class Ui_DrawInterface(object):
         self.button_gateway.clicked.connect(lambda: add_gateway(self.scene, self.language))
         self.button_connect.clicked.connect(lambda: add_connect(self.scene, self.language))
         self.button_clone_machines.clicked.connect(lambda: cloneConfigureMachines(self.selected_vm, self.scene))
-        self.button_setup_network.clicked.connect(lambda: setup_network(self.scene))
+        self.button_setup_network.clicked.connect(lambda: setup_network(self.scene, self.language))
         self.button_save.clicked.connect(lambda: save_diagram(self.scene))
         self.button_load.clicked.connect(lambda: load_diagram(self.scene, self.language))
 

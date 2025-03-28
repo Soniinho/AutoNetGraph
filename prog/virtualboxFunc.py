@@ -2,7 +2,11 @@ import virtualbox, time
 
 from prog.nodes import NetworkShape
 
-# TODO: aumentar tempos entre coisas, e colocar eles como globais
+delay_1 = 2     # 1
+delay_2 = 4     # 2
+delay_3 = 8     # 5
+delay_4 = 40    # 30
+
 def generate_files(self):
         """ Ordenação pelo Z-Value: Os itens com valores de Z menores 
         aparecem antes no loop. Isso reflete a "profundidade" dos 
@@ -78,7 +82,7 @@ def cloneConfigureMachines(selected_vm, scene):
             progress.wait_for_completion()
 
             # Aguarda alguns segundos para a máquina inicializar até a tela de login
-            time.sleep(30)  # Ajuste o tempo conforme necessário
+            time.sleep(delay_4)  # Ajuste o tempo conforme necessário
 
             # Obtém o teclado da máquina virtual
             console = session.console
@@ -157,27 +161,27 @@ def login(keyboard, username, password):
     # Insere o usuário e a senha simulando a entrada pelo teclado
     keyboard.put_keys(username)
     keyboard.put_keys(["ENTER"])
-    time.sleep(1)  # Tempo para o sistema processar
+    time.sleep(delay_1)  # Tempo para o sistema processar
     keyboard.put_keys(password)
     keyboard.put_keys(["ENTER"])
 
     # Espera 5 segundos antes de abrir o terminal
-    time.sleep(5)
+    time.sleep(delay_3)
 
 def openTerminal(keyboard):
     # Simula a abertura do terminal (Alt+F2 e comando lxterminal)
     keyboard.put_keys(hold_keys=["ALT"], press_keys=["F2"])
-    time.sleep(1)  # Aguarda o menu abrir
+    time.sleep(delay_1)  # Aguarda o menu abrir
     keyboard.put_keys("lxterminal")
     keyboard.put_keys(["ENTER"])
 
-    time.sleep(1)  # Aguarda o menu abrir
+    time.sleep(delay_1)  # Aguarda o menu abrir
 
 def startInterfaceFile(keyboard):
     keyboard.put_keys('echo "" > /etc/network/interfaces\n')
     keyboard.put_keys("nano /etc/network/interfaces\n")
 
-    time.sleep(1)
+    time.sleep(delay_1)
 
     keyboard.put_keys("source /etc/network/interfaces.d/*\n\n")
             
@@ -214,12 +218,12 @@ def makeInterfaceFile(keyboard, item):
 
 def saveInterfaceFile(keyboard):
     keyboard.put_keys(hold_keys=["CTRL"], press_keys=["o"])
-    time.sleep(1)
+    time.sleep(delay_1)
     keyboard.put_keys(["ENTER"])
-    time.sleep(1)
+    time.sleep(delay_1)
     keyboard.put_keys(hold_keys=["CTRL"], press_keys=["x"])
-    time.sleep(1)
+    time.sleep(delay_1)
     keyboard.put_keys(["ENTER"])
-    time.sleep(1)
+    time.sleep(delay_1)
     keyboard.put_keys("systemctl restart networking\n")
-    time.sleep(2)
+    time.sleep(delay_4)

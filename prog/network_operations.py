@@ -1,11 +1,14 @@
 from PyQt6 import QtWidgets
 
+from prog.translations import TRANSLATIONS
 from prog.nodes import MovableRect, MovableEllipse
 
 # TODO: quando o setup acontece, ele vai na mesma interface para ambos os gateways
 # TODO: quando é setado para ser automatico, ele põe em manual e preenche os campos escrevendo automático, invés de ignorar
-# TODO: erros fora da tradução
-def setup_network(scene):
+def setup_network(scene, language):
+    translations = TRANSLATIONS
+    texts = translations[language]
+
     all_items = [item for item in scene.items() if isinstance(item, (MovableRect, MovableEllipse))]
     
     root = None
@@ -19,16 +22,16 @@ def setup_network(scene):
                 if root is None:
                     root = item
                 else:
-                    QtWidgets.QMessageBox.warning(None, "Erro", "Múltiplos gateways com apenas uma interface conectada encontrados!")
+                    QtWidgets.QMessageBox.warning(None, texts["error_1"], texts["error_3"])
                     return
     
     if not root:
-        QtWidgets.QMessageBox.warning(None, "Erro", "Nenhum gateway raiz encontrado!")
+        QtWidgets.QMessageBox.warning(None, texts["error_1"], texts["error_4"])
         return
     
     for item in all_items:
         if not item.has_valid_connections():
-            QtWidgets.QMessageBox.warning(None, "Erro", "Alguns objetos não têm todas as interfaces necessárias conectadas!")
+            QtWidgets.QMessageBox.warning(None, texts["error_1"], texts["error_5"])
             return
     
     used_ips = set()

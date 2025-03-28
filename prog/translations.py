@@ -21,6 +21,11 @@ TRANSLATIONS = {
         "broadcast": "Broadcast",
         "interface_config": "Interface {name} Configuração",
         "select_interface": "Selecione a Interface",
+        "error_1": "Erro",
+        "error_2": "Não é possível conectar dois hosts diretamente.",
+        "error_3": "Múltiplos gateways com apenas uma interface conectada encontrados.",
+        "error_4": "Nenhum gateway raiz encontrado.",
+        "error_5": "Alguns objetos não têm todas as interfaces necessárias conectadas.",
     },
     "en": {
         "title": "Diagram Editor",
@@ -44,5 +49,10 @@ TRANSLATIONS = {
         "broadcast": "Broadcast",
         "interface_config": "Interface {name} Configuration",
         "select_interface": "Select Interface",
+        "error_1": "Error",
+        "error_2": "You cannot conect two hosts directly.",
+        "error_3": "Multiple gateways with only one connected interface found.",
+        "error_4": "No root gateway found.",
+        "error_5": "Some objects do not have all required interfaces wired.",
     },
 }
