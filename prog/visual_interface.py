@@ -26,26 +26,24 @@ class Ui_DrawInterface(object):
         button_layout = QHBoxLayout()
 
         # Create buttons
+        self.button_save = QPushButton(texts["save_button"], self.centralwidget)
+        self.button_load = QPushButton(texts["load_button"], self.centralwidget)
         self.button_computer = QPushButton(texts["computer_button"], self.centralwidget)
         self.button_gateway = QPushButton(texts["gateway_button"], self.centralwidget)
         self.button_connect = QPushButton(texts["connect_button"], self.centralwidget)
+        self.button_setup_network = QPushButton(texts["setup_network"], self.centralwidget)
         self.button_clone_machines = QPushButton(texts["clone_button"], self.centralwidget)
-        self.button_setup_network = QPushButton("Setup Network", self.centralwidget)
-        self.button_save = QPushButton(texts["save_button"], self.centralwidget)
-        self.button_load = QPushButton(texts["load_button"], self.centralwidget)
 
         # Set button sizes
-        for button in (self.button_computer, self.button_gateway, self.button_connect,
-                      self.button_save, self.button_load):
+        for button in (self.button_save, self.button_load, self.button_computer, self.button_gateway, self.button_connect):
             button.setFixedSize(80, 30)
         
-        self.button_clone_machines.setFixedSize(120, 30)
         self.button_setup_network.setFixedSize(120, 30)
+        self.button_clone_machines.setFixedSize(120, 30)
 
         # Add buttons to layout
-        for button in (self.button_computer, self.button_gateway, self.button_connect,
-                      self.button_clone_machines, self.button_setup_network,
-                      self.button_save, self.button_load):
+        for button in (self.button_save, self.button_load, self.button_computer, self.button_gateway, self.button_connect,
+                      self.button_setup_network, self.button_clone_machines):
             button_layout.addWidget(button)
 
         self.layout.addLayout(button_layout)

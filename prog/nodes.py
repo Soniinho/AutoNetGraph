@@ -126,7 +126,7 @@ class MovableEllipse(NetworkShape, QGraphicsEllipseItem):
         self.connections = []
         self.setZValue(1)
 
-# TODO: fazer com que as conexões sejam separadas por interface
+
 class MovableRect(NetworkShape, QGraphicsRectItem):
     def __init__(self, x, y, width, height, language="en"):
         interfaces = [
@@ -135,23 +135,42 @@ class MovableRect(NetworkShape, QGraphicsRectItem):
         ]
         QGraphicsRectItem.__init__(self, x, y, width, height)
         NetworkShape.__init__(self, interfaces, ip_forward=1, language=language)
+        
+        # Criando um dicionário para armazenar conexões por interface
+        self.connections_by_interface = {
+            "enp0s8": [],
+            "enp0s3": []
+        }
+        # Mantendo a lista genérica para compatibilidade
         self.connections = []
+        
         self.setZValue(1)
 
 
 class ConnectionLine(QGraphicsLineItem):
     def __init__(self, start_item, end_item, interface_name=None, language="en"):
         super().__init__()
-        self.setFlags(QGraphicsLineItem.GraphicsItemFlag.ItemIsSelectable)  # Add this line
+        self.setFlags(QGraphicsLineItem.GraphicsItemFlag.ItemIsSelectable)
         self.start_item = start_item
         self.end_item = end_item
         self.interface_name = interface_name
         self.setPen(QPen(Qt.GlobalColor.black, 2))
+        
+        # Adiciona à lista genérica
         self.start_item.connections.append(self)
         self.end_item.connections.append(self)
+        
+        # Adiciona à lista específica da interface, se existir
+        if interface_name:
+            if hasattr(self.start_item, 'connections_by_interface') and interface_name in self.start_item.connections_by_interface:
+                self.start_item.connections_by_interface[interface_name].append(self)
+            
+            if hasattr(self.end_item, 'connections_by_interface') and interface_name in self.end_item.connections_by_interface:
+                self.end_item.connections_by_interface[interface_name].append(self)
+        
         self.setZValue(0)
         self.update_position()
-        self.language = language  # Armazena o idioma escolhido
+        self.language = language
         self.translations = TRANSLATIONS
         
         # Adiciona texto para mostrar a interface
@@ -168,11 +187,22 @@ class ConnectionLine(QGraphicsLineItem):
         action = menu.exec(event.screenPos())
         
         if action == delete_action:
-            # Remove connection from both connected items
+            # Remove from generic connections list
             if self in self.start_item.connections:
                 self.start_item.connections.remove(self)
             if self in self.end_item.connections:
                 self.end_item.connections.remove(self)
+                
+            # Remove from interface-specific connections list
+            if self.interface_name:
+                if hasattr(self.start_item, 'connections_by_interface') and self.interface_name in self.start_item.connections_by_interface:
+                    if self in self.start_item.connections_by_interface[self.interface_name]:
+                        self.start_item.connections_by_interface[self.interface_name].remove(self)
+                
+                if hasattr(self.end_item, 'connections_by_interface') and self.interface_name in self.end_item.connections_by_interface:
+                    if self in self.end_item.connections_by_interface[self.interface_name]:
+                        self.end_item.connections_by_interface[self.interface_name].remove(self)
+                        
             # Remove connection from scene
             self.scene().removeItem(self)
 

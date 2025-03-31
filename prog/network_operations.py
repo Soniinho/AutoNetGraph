@@ -3,8 +3,7 @@ from PyQt6 import QtWidgets
 from prog.translations import TRANSLATIONS
 from prog.nodes import MovableRect, MovableEllipse
 
-# TODO: quando o setup acontece, ele vai na mesma interface para ambos os gateways
-# TODO: quando é setado para ser automatico, ele põe em manual e preenche os campos escrevendo automático, invés de ignorar
+# TODO: falta ele configurar a enp0s3, e não está configurando corretamente, tentar parte a parte
 def setup_network(scene, language):
     translations = TRANSLATIONS
     texts = translations[language]
@@ -15,9 +14,18 @@ def setup_network(scene, language):
     for item in all_items:
         if isinstance(item, MovableRect):
             connected_interfaces = set()
-            for conn in item.connections:
-                if conn.interface_name:
-                    connected_interfaces.add(conn.interface_name)
+            
+            # Usar o novo sistema de conexões por interface, se disponível
+            if hasattr(item, 'connections_by_interface'):
+                for interface_name, connections in item.connections_by_interface.items():
+                    if connections:
+                        connected_interfaces.add(interface_name)
+            else:
+                # Fallback para o sistema antigo
+                for conn in item.connections:
+                    if conn.interface_name:
+                        connected_interfaces.add(conn.interface_name)
+                        
             if len(connected_interfaces) == 1:
                 if root is None:
                     root = item
@@ -38,21 +46,21 @@ def setup_network(scene, language):
     def configure_network(node, subnet_counter=1):
         if isinstance(node, MovableRect):
             for interface in node.interfaces:
-                interface['automatic'] = False
-                if interface['name'] == 'enp0s8':
-                    ip = f"192.168.{subnet_counter}.1"
-                    if ip not in used_ips:
-                        interface['ip'] = ip
-                        interface['netmask'] = "255.255.255.0"
-                        interface['network'] = f"192.168.{subnet_counter}.0"
-                        interface['gateway'] = "0.0.0.0"
-                        used_ips.add(ip)
-                        subnet_counter += 1
+                    if interface['name'] == 'enp0s8':
+                        ip = f"192.168.{subnet_counter}.1"
+                        if ip not in used_ips:
+                            interface['automatic'] = False
+                            interface['ip'] = ip
+                            interface['netmask'] = "255.255.255.0"
+                            interface['network'] = f"192.168.{subnet_counter}.0"
+                            interface['gateway'] = "0.0.0.0"
+                            used_ips.add(ip)
+                            subnet_counter += 1
         elif isinstance(node, MovableEllipse):
             interface = node.interfaces[0]
-            interface['automatic'] = False
             ip = f"192.168.{subnet_counter-1}.{len(used_ips) % 254 + 1}"
             if ip not in used_ips:
+                interface['automatic'] = False
                 interface['ip'] = ip
                 interface['netmask'] = "255.255.255.0"
                 interface['network'] = f"192.168.{subnet_counter-1}.0"
@@ -61,8 +69,47 @@ def setup_network(scene, language):
         
         node.text_item.setPlainText(node.info_text())
         
-        for connected_node, _ in node.get_connected_items():
-            if connected_node.interfaces[0]['ip'] == "automático":
+        # Obter os nós conectados usando o sistema atualizado
+        connected_items = []
+        
+        if isinstance(node, MovableRect) and hasattr(node, 'connections_by_interface'):
+            # Usar o novo sistema de conexões por interface
+            for interface_name, connections in node.connections_by_interface.items():
+                for conn in connections:
+                    connected_node = conn.start_item if conn.start_item != node else conn.end_item
+                    interface_used = conn.interface_name
+                    
+                    # Extrair o nome da interface para conexões entre dois MovableRect
+                    if '<->' in interface_used:
+                        parts = interface_used.split(' <-> ')
+                        interface_used = parts[1] if connected_node == conn.end_item else parts[0]
+                    
+                    connected_items.append((connected_node, interface_used))
+        else:
+            # Fallback para o sistema antigo
+            for conn in node.connections:
+                connected_node = conn.start_item if conn.start_item != node else conn.end_item
+                interface_used = conn.interface_name
+                connected_items.append((connected_node, interface_used))
+        
+        # Configurar os nós conectados
+        for connected_node, interface_used in connected_items:
+            # Verificar se o nó precisa ser configurado
+            needs_config = False
+            
+            if isinstance(connected_node, MovableEllipse):
+                interface = connected_node.interfaces[0]
+                if interface['automatic'] and interface['ip'] == "automático":
+                    needs_config = True
+            elif isinstance(connected_node, MovableRect):
+                # Encontrar a interface conectada
+                for interface in connected_node.interfaces:
+                    if interface['name'] == interface_used:
+                        if interface['automatic'] and interface['ip'] == "automático":
+                            needs_config = True
+                        break
+            
+            if needs_config:
                 configure_network(connected_node, subnet_counter)
     
     configure_network(root)

@@ -26,6 +26,9 @@ TRANSLATIONS = {
         "error_3": "Múltiplos gateways com apenas uma interface conectada encontrados.",
         "error_4": "Nenhum gateway raiz encontrado.",
         "error_5": "Alguns objetos não têm todas as interfaces necessárias conectadas.",
+        "select_interfaces": "Selecione as Interfaces",
+        "device": "Dispositivo",
+        "setup_network": "Configurar Rede",
     },
     "en": {
         "title": "Diagram Editor",
@@ -54,5 +57,8 @@ TRANSLATIONS = {
         "error_3": "Multiple gateways with only one connected interface found.",
         "error_4": "No root gateway found.",
         "error_5": "Some objects do not have all required interfaces wired.",
+        "select_interfaces": "Select Interfaces",
+        "device": "Device",
+        "setup_network": "Setup Network",
     },
 }
