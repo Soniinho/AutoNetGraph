@@ -27,6 +27,10 @@ def add_connect(scene, language):
     selected_items = scene.selectedItems()
     if len(selected_items) == 2:
         item1, item2 = selected_items
+
+        # Ordem pelo eixo Y
+        if len(selected_items) == 2:
+            item1, item2 = sorted(selected_items, key=lambda item: item.pos().y())
         
         # Check existing connection
         for conn in item1.connections:

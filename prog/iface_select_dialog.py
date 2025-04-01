@@ -18,7 +18,7 @@ class InterfaceSelectionDialog(QDialog):
         layout = QVBoxLayout(self)
         
         # Interface selection for the first gateway
-        gateway1_label = QLabel(texts["select_interface"] + " " + (getattr(gateway1, 'name', '') or texts["device"] + " 1"))
+        gateway1_label = QLabel(texts["select_interface"] + " " + (getattr(gateway1, 'name', '') or texts["device"] + " " + texts["up"]))
         layout.addWidget(gateway1_label)
         
         self.combo1 = QComboBox()
@@ -37,7 +37,7 @@ class InterfaceSelectionDialog(QDialog):
             layout.addSpacing(10)
             
             # Add interface selection for gateway2
-            gateway2_label = QLabel(texts["select_interface"] + " " + (getattr(gateway2, 'name', '') or texts["device"] + " 2"))
+            gateway2_label = QLabel(texts["select_interface"] + " " + (getattr(gateway2, 'name', '') or texts["device"] + " " + texts["down"]))
             layout.addWidget(gateway2_label)
             
             self.combo2 = QComboBox()

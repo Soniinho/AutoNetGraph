@@ -29,6 +29,8 @@ TRANSLATIONS = {
         "select_interfaces": "Selecione as Interfaces",
         "device": "Dispositivo",
         "setup_network": "Configurar Rede",
+        "up": "de cima",
+        "down": "de baixo",
     },
     "en": {
         "title": "Diagram Editor",
@@ -60,5 +62,7 @@ TRANSLATIONS = {
         "select_interfaces": "Select Interfaces",
         "device": "Device",
         "setup_network": "Setup Network",
+        "up": "from above",
+        "down": "from below",
     },
 }

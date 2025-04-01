@@ -3,26 +3,8 @@
         {
             "type": "ellipse",
             "pos": {
-                "x": 574.0,
-                "y": 386.0
-            },
-            "interfaces": [
-                {
-                    "name": "enp0s8",
-                    "ip": "autom\u00e1tico",
-                    "netmask": "autom\u00e1tico",
-                    "network": "autom\u00e1tico",
-                    "gateway": "autom\u00e1tico",
-                    "automatic": true
-                }
-            ],
-            "ip_forward": 0
-        },
-        {
-            "type": "ellipse",
-            "pos": {
-                "x": 325.0,
-                "y": 373.0
+                "x": 23.0,
+                "y": 472.0
             },
             "interfaces": [
                 {
@@ -39,8 +21,8 @@
         {
             "type": "rect",
             "pos": {
-                "x": 462.0,
-                "y": 199.0
+                "x": 12.0,
+                "y": 370.0
             },
             "interfaces": [
                 {
@@ -49,6 +31,7 @@
                     "netmask": "autom\u00e1tico",
                     "network": "autom\u00e1tico",
                     "gateway": "autom\u00e1tico",
+                    "broadcast": "autom\u00e1tico",
                     "automatic": true
                 },
                 {
@@ -56,6 +39,7 @@
                     "ip": "autom\u00e1tico",
                     "netmask": "autom\u00e1tico",
                     "network": "autom\u00e1tico",
+                    "gateway": "autom\u00e1tico",
                     "broadcast": "autom\u00e1tico",
                     "automatic": true
                 }
@@ -64,9 +48,9 @@
             "has_connections_by_interface": true
         },
         {
-            "type": "ellipse",
+            "type": "rect",
             "pos": {
-                "x": 101.0,
+                "x": 4.0,
                 "y": 207.0
             },
             "interfaces": [
@@ -76,16 +60,27 @@
                     "netmask": "autom\u00e1tico",
                     "network": "autom\u00e1tico",
                     "gateway": "autom\u00e1tico",
+                    "broadcast": "autom\u00e1tico",
+                    "automatic": true
+                },
+                {
+                    "name": "enp0s3",
+                    "ip": "autom\u00e1tico",
+                    "netmask": "autom\u00e1tico",
+                    "network": "autom\u00e1tico",
+                    "gateway": "autom\u00e1tico",
+                    "broadcast": "autom\u00e1tico",
                     "automatic": true
                 }
             ],
-            "ip_forward": 0
+            "ip_forward": 1,
+            "has_connections_by_interface": true
         },
         {
             "type": "rect",
             "pos": {
-                "x": 264.0,
-                "y": 27.0
+                "x": 0.0,
+                "y": 0.0
             },
             "interfaces": [
                 {
@@ -94,6 +89,7 @@
                     "netmask": "autom\u00e1tico",
                     "network": "autom\u00e1tico",
                     "gateway": "autom\u00e1tico",
+                    "broadcast": "autom\u00e1tico",
                     "automatic": true
                 },
                 {
@@ -101,6 +97,7 @@
                     "ip": "autom\u00e1tico",
                     "netmask": "autom\u00e1tico",
                     "network": "autom\u00e1tico",
+                    "gateway": "autom\u00e1tico",
                     "broadcast": "autom\u00e1tico",
                     "automatic": true
                 }
@@ -111,24 +108,19 @@
     ],
     "connections": [
         {
-            "start_idx": 2,
-            "end_idx": 0,
-            "interface_name": "enp0s8"
-        },
-        {
             "start_idx": 1,
-            "end_idx": 2,
-            "interface_name": "enp0s8"
-        },
-        {
-            "start_idx": 4,
             "end_idx": 2,
             "interface_name": "enp0s8 <-> enp0s3"
         },
         {
-            "start_idx": 4,
-            "end_idx": 3,
+            "start_idx": 1,
+            "end_idx": 0,
             "interface_name": "enp0s8"
+        },
+        {
+            "start_idx": 2,
+            "end_idx": 3,
+            "interface_name": "enp0s8 <-> enp0s3"
         }
     ]
 }

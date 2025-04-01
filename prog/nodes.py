@@ -79,6 +79,12 @@ class NetworkShape:
         # Atualiza o texto exibido
         self.text_item.setPlainText(self.info_text())
 
+    def mouseMoveEvent(self, event):
+        super().mouseMoveEvent(event)
+        # Update connections for all selected items
+        for item in self.scene().selectedItems():
+            if hasattr(item, 'update_connections'):
+                item.update_connections()
 
     def update_connections(self):
         for line in self.connections:
@@ -86,34 +92,58 @@ class NetworkShape:
 
     def has_valid_connections(self):
         """Verifica se todas as interfaces têm pelo menos uma conexão"""
-        connected_interfaces = set()
-        for conn in self.connections:
-            if isinstance(self, MovableRect):
-                if conn.interface_name:
-                    connected_interfaces.add(conn.interface_name)
-        
-        if isinstance(self, MovableRect):
-            return len(connected_interfaces) >= 1
+        if isinstance(self, MovableRect) and hasattr(self, 'connections_by_interface'):
+            # Verifica se pelo menos uma interface tem conexão
+            for interface, connections in self.connections_by_interface.items():
+                if connections:
+                    return True
+            return False
         elif isinstance(self, MovableEllipse):
             return len(self.connections) >= 1
-        return False
+        # Fallback para o método antigo se não tiver o dicionário
+        else:
+            connected_interfaces = set()
+            for conn in self.connections:
+                if conn.interface_name:
+                    connected_interfaces.add(conn.interface_name)
+            
+            if isinstance(self, MovableRect):
+                return len(connected_interfaces) >= 1
+            elif isinstance(self, MovableEllipse):
+                return len(self.connections) >= 1
+            return False
 
     def get_connected_items(self):
         """Retorna todos os itens conectados a este nó"""
         connected = []
-        for conn in self.connections:
-            if conn.start_item == self:
-                connected.append((conn.end_item, conn.interface_name))
-            else:
-                connected.append((conn.start_item, conn.interface_name))
+        
+        # Para MovableRect com o dicionário connections_by_interface
+        if isinstance(self, MovableRect) and hasattr(self, 'connections_by_interface'):
+            for interface, connections in self.connections_by_interface.items():
+                for conn in connections:
+                    connected_item = conn.end_item if conn.start_item == self else conn.start_item
+                    # Para conexões entre gateways, extract a interface correta do formato "iface1 <-> iface2"
+                    interface_name = conn.interface_name
+                    if ' <-> ' in interface_name:
+                        parts = interface_name.split(' <-> ')
+                        if conn.start_item == self:
+                            interface_name = parts[0]
+                        else:
+                            interface_name = parts[1]
+                    
+                    # Evitar duplicados
+                    item_entry = (connected_item, interface_name)
+                    if item_entry not in connected:
+                        connected.append(item_entry)
+        # Método antigo para compatibilidade
+        else:
+            for conn in self.connections:
+                if conn.start_item == self:
+                    connected.append((conn.end_item, conn.interface_name))
+                else:
+                    connected.append((conn.start_item, conn.interface_name))
+        
         return connected
-    
-    def mouseMoveEvent(self, event):
-        super().mouseMoveEvent(event)
-        # Update connections for all selected items
-        for item in self.scene().selectedItems():
-            if hasattr(item, 'update_connections'):
-                item.update_connections()
 
 
 class MovableEllipse(NetworkShape, QGraphicsEllipseItem):
@@ -130,8 +160,8 @@ class MovableEllipse(NetworkShape, QGraphicsEllipseItem):
 class MovableRect(NetworkShape, QGraphicsRectItem):
     def __init__(self, x, y, width, height, language="en"):
         interfaces = [
-            {"name": "enp0s8", "ip": "automático", "netmask": "automático", "network": "automático", "gateway": "automático", "automatic": True},
-            {"name": "enp0s3", "ip": "automático", "netmask": "automático", "network": "automático", "broadcast": "automático", "automatic": True}
+            {"name": "enp0s8", "ip": "automático", "netmask": "automático", "network": "automático", "gateway": "automático", "broadcast": "automático", "automatic": True},
+            {"name": "enp0s3", "ip": "automático", "netmask": "automático", "network": "automático", "gateway": "automático", "broadcast": "automático", "automatic": True}
         ]
         QGraphicsRectItem.__init__(self, x, y, width, height)
         NetworkShape.__init__(self, interfaces, ip_forward=1, language=language)
