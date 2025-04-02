@@ -3,7 +3,7 @@ from PyQt6 import QtWidgets
 from prog.translations import TRANSLATIONS
 from prog.nodes import MovableRect, MovableEllipse
 
-#@ funcionando, necessário mais testes
+# TODO: quase
 def setup_network(scene, language):
     translations = TRANSLATIONS
     texts = translations[language]
@@ -32,7 +32,7 @@ def setup_network(scene, language):
     # Configure root node's enp0s8 interface
     for interface in root_node.interfaces:
         if interface['name'] == 'enp0s8':
-            interface['automatic'] = False  # Certifique-se de definir como False
+            interface['automatic'] = False
             interface['ip'] = '192.168.0.1'
             interface['netmask'] = '255.255.255.0'
             interface['network'] = '192.168.0.0'
@@ -96,7 +96,7 @@ def setup_network(scene, language):
             
             # Determinar qual interface do nó atual e do nó conectado usar
             current_node_interface = interface_name
-            connected_node_interface = 'enp0s8' if interface_name == 'enp0s3' else 'enp0s3'
+            connected_node_interface = interface_name
             
             # Caso especial gateway-gateway
             if isinstance(current_node, MovableRect) and isinstance(connected_item, MovableRect):
@@ -117,23 +117,19 @@ def setup_network(scene, language):
             # Configurar a interface do item conectado
             if isinstance(connected_item, MovableRect):
                 # Gateway: configura a interface apropriada
-                interface_updated = False
-                other_interface_updated = False
-                
                 for interface in connected_item.interfaces:
                     if interface['name'] == connected_node_interface:
                         # Se esta interface já está configurada, pular
-                        if interface.get('ip') and not interface.get('automatic', True):
+                        if interface.get('ip'):
                             continue
                         
                         # Configurar esta interface com a rede atual
                         next_ip, network, broadcast = get_next_ip(network_id)
-                        interface['automatic'] = False  # Importante: definir explicitamente como False
+                        interface['automatic'] = False
                         interface['ip'] = next_ip
                         interface['netmask'] = '255.255.255.0'
                         interface['network'] = network
                         interface['broadcast'] = broadcast
-                        interface_updated = True
                         
                         # Associar esta interface à rede atual
                         node_interface_network[(connected_item, connected_node_interface)] = network_id
@@ -143,52 +139,47 @@ def setup_network(scene, language):
                             if curr_interface['name'] == current_node_interface:
                                 interface['gateway'] = curr_interface['ip']
                                 break
-                
-                # Configurar outra interface com uma NOVA rede (importante!)
-                other_interface_name = 'enp0s3' if connected_node_interface == 'enp0s8' else 'enp0s8'
-                for other_interface in connected_item.interfaces:
-                    if other_interface['name'] == other_interface_name:
-                        # Se esta interface já está configurada, pular
-                        if other_interface.get('ip') and not other_interface.get('automatic', True):
-                            continue
                         
-                        # Criar uma nova rede para a outra interface
-                        new_network_id = create_new_network()
-                        next_ip, network, broadcast = get_next_ip(new_network_id)
-                        other_interface['automatic'] = False  # Importante: definir explicitamente como False
-                        other_interface['ip'] = next_ip
-                        other_interface['netmask'] = '255.255.255.0'
-                        other_interface['network'] = network
-                        other_interface['broadcast'] = broadcast
-                        other_interface_updated = True
+                        # Configurar outra interface com uma NOVA rede (importante!)
+                        other_interface_name = 'enp0s3' if connected_node_interface == 'enp0s8' else 'enp0s8'
+                        for other_interface in connected_item.interfaces:
+                            if other_interface['name'] == other_interface_name:
+                                # Se esta interface já está configurada, pular
+                                if other_interface.get('ip'):
+                                    continue
+                                
+                                # Criar uma nova rede para a outra interface
+                                new_network_id = create_new_network()
+                                next_ip, network, broadcast = get_next_ip(new_network_id)
+                                other_interface['automatic'] = False
+                                other_interface['ip'] = next_ip
+                                other_interface['netmask'] = '255.255.255.0'
+                                other_interface['network'] = network
+                                other_interface['broadcast'] = broadcast
+                                
+                                # Associar esta interface à nova rede
+                                node_interface_network[(connected_item, other_interface_name)] = new_network_id
+                                break
                         
-                        # Associar esta interface à nova rede
-                        node_interface_network[(connected_item, other_interface_name)] = new_network_id
                         break
-                
-                # Apenas atualize o texto se alguma interface foi atualizada
-                if interface_updated or other_interface_updated:
-                    # Atualiza o texto exibido
-                    connected_item.text_item.setPlainText(connected_item.info_text())
             else:
                 # Host (MovableEllipse): configura sua única interface
                 interface = connected_item.interfaces[0]
-                if not interface.get('ip') or interface.get('automatic', True):
-                    next_ip, network, broadcast = get_next_ip(network_id)
-                    interface['automatic'] = False  # Importante: definir explicitamente como False
-                    interface['ip'] = next_ip
-                    interface['netmask'] = '255.255.255.0'
-                    interface['network'] = network
-                    interface['broadcast'] = broadcast
-                    
-                    # Define o gateway como o IP do nó gateway conectado
-                    for curr_interface in current_node.interfaces:
-                        if curr_interface['name'] == current_node_interface:
-                            interface['gateway'] = curr_interface['ip']
-                            break
-                    
-                    # Atualiza o texto exibido
-                    connected_item.text_item.setPlainText(connected_item.info_text())
+                next_ip, network, broadcast = get_next_ip(network_id)
+                interface['automatic'] = False
+                interface['ip'] = next_ip
+                interface['netmask'] = '255.255.255.0'
+                interface['network'] = network
+                interface['broadcast'] = broadcast
+                
+                # Define o gateway como o IP do nó gateway conectado
+                for curr_interface in current_node.interfaces:
+                    if curr_interface['name'] == current_node_interface:
+                        interface['gateway'] = curr_interface['ip']
+                        break
+            
+            # Atualiza o texto exibido
+            connected_item.text_item.setPlainText(connected_item.info_text())
             
             # Marca como configurado e adiciona à fila para processar seus vizinhos
             configured_nodes.add(connected_item)
