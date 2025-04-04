@@ -1,7 +1,7 @@
 from PyQt6 import QtWidgets
 
 from model.translations import TRANSLATIONS
-from model.network_shape import MovableRect, MovableEllipse
+from model import MovableRect, MovableEllipse
 
 
 #@ funcionando, necessário mais testes

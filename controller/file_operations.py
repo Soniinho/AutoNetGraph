@@ -4,7 +4,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QBrush
 from PyQt6.QtWidgets import QGraphicsItem
 
-from model.network_shape import MovableEllipse, MovableRect, ConnectionLine
+from model import MovableEllipse, MovableRect, ConnectionLine
 
 
 def save_diagram(scene):

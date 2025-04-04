@@ -1,6 +1,6 @@
 import virtualbox, time
 
-from model.network_shape import NetworkShape
+from model import NetworkShape
 
 delay_1 = 2     # 1
 delay_2 = 4     # 2

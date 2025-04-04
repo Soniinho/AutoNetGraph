@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QVBoxLayout, QDialog, QComboBox, QDialogButtonBox, QFrame, QLabel
 
-from model.network_shape import MovableRect
+from model import MovableRect
 from model.translations import TRANSLATIONS
 
 

@@ -1,6 +1,5 @@
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont, QPen
-from PyQt6.QtWidgets import QGraphicsTextItem, QMenu, QDialog, QGraphicsRectItem, QGraphicsEllipseItem, QGraphicsLineItem, QGraphicsTextItem, QMenu
+from PyQt6.QtGui import QFont
+from PyQt6.QtWidgets import QGraphicsTextItem, QMenu, QDialog, QGraphicsTextItem, QMenu
 
 from controller.iface_properties_dialog import InterfacePropertiesDialog
 from model.translations import TRANSLATIONS
@@ -92,13 +91,14 @@ class NetworkShape:
 
     def has_valid_connections(self):
         """Verifica se todas as interfaces têm pelo menos uma conexão"""
-        if isinstance(self, MovableRect) and hasattr(self, 'connections_by_interface'):
+        # Em vez de usar isinstance, verificamos o nome da classe
+        if self.__class__.__name__ == 'MovableRect' and hasattr(self, 'connections_by_interface'):
             # Verifica se pelo menos uma interface tem conexão
             for interface, connections in self.connections_by_interface.items():
                 if connections:
                     return True
             return False
-        elif isinstance(self, MovableEllipse):
+        elif self.__class__.__name__ == 'MovableEllipse':
             return len(self.connections) >= 1
         # Fallback para o método antigo se não tiver o dicionário
         else:
@@ -107,9 +107,9 @@ class NetworkShape:
                 if conn.interface_name:
                     connected_interfaces.add(conn.interface_name)
             
-            if isinstance(self, MovableRect):
+            if self.__class__.__name__ == 'MovableRect':
                 return len(connected_interfaces) >= 1
-            elif isinstance(self, MovableEllipse):
+            elif self.__class__.__name__ == 'MovableEllipse':
                 return len(self.connections) >= 1
             return False
 
@@ -118,7 +118,7 @@ class NetworkShape:
         connected = []
         
         # Para MovableRect com o dicionário connections_by_interface
-        if isinstance(self, MovableRect) and hasattr(self, 'connections_by_interface'):
+        if self.__class__.__name__ == 'MovableRect' and hasattr(self, 'connections_by_interface'):
             for interface, connections in self.connections_by_interface.items():
                 for conn in connections:
                     connected_item = conn.end_item if conn.start_item == self else conn.start_item
@@ -144,106 +144,3 @@ class NetworkShape:
                     connected.append((conn.start_item, conn.interface_name))
         
         return connected
-
-
-class MovableRect(NetworkShape, QGraphicsRectItem):
-    def __init__(self, x, y, width, height, language="en"):
-        interfaces = [
-            {"name": "enp0s8", "ip": "automático", "netmask": "automático", "network": "automático", "gateway": "automático", "broadcast": "automático", "automatic": True},
-            {"name": "enp0s3", "ip": "automático", "netmask": "automático", "network": "automático", "gateway": "automático", "broadcast": "automático", "automatic": True}
-        ]
-        QGraphicsRectItem.__init__(self, x, y, width, height)
-        NetworkShape.__init__(self, interfaces, ip_forward=1, language=language)
-        
-        # Criando um dicionário para armazenar conexões por interface
-        self.connections_by_interface = {
-            "enp0s8": [],
-            "enp0s3": []
-        }
-        # Mantendo a lista genérica para compatibilidade
-        self.connections = []
-        
-        self.setZValue(1)
-
-
-class MovableEllipse(NetworkShape, QGraphicsEllipseItem):
-    def __init__(self, x, y, width, height, language="en"):
-        interfaces = [
-            {"name": "enp0s8", "ip": "automático", "netmask": "automático", "network": "automático", "gateway": "automático", "automatic": True}
-        ]
-        QGraphicsEllipseItem.__init__(self, x, y, width, height)
-        NetworkShape.__init__(self, interfaces, ip_forward=0, language=language)
-        self.connections = []
-        self.setZValue(1)
-
-
-class ConnectionLine(QGraphicsLineItem):
-    def __init__(self, start_item, end_item, interface_name=None, language="en"):
-        super().__init__()
-        self.setFlags(QGraphicsLineItem.GraphicsItemFlag.ItemIsSelectable)
-        self.start_item = start_item
-        self.end_item = end_item
-        self.interface_name = interface_name
-        self.setPen(QPen(Qt.GlobalColor.black, 2))
-        
-        # Adiciona à lista genérica
-        self.start_item.connections.append(self)
-        self.end_item.connections.append(self)
-        
-        # Adiciona à lista específica da interface, se existir
-        if interface_name:
-            if hasattr(self.start_item, 'connections_by_interface') and interface_name in self.start_item.connections_by_interface:
-                self.start_item.connections_by_interface[interface_name].append(self)
-            
-            if hasattr(self.end_item, 'connections_by_interface') and interface_name in self.end_item.connections_by_interface:
-                self.end_item.connections_by_interface[interface_name].append(self)
-        
-        self.setZValue(0)
-        self.update_position()
-        self.language = language
-        self.translations = TRANSLATIONS
-        
-        # Adiciona texto para mostrar a interface
-        if interface_name:
-            self.text_item = QGraphicsTextItem(self)
-            self.text_item.setPlainText(interface_name)
-            self.text_item.setDefaultTextColor(Qt.GlobalColor.blue)
-            self.update_text_position()
-    
-    def contextMenuEvent(self, event):
-        texts = self.translations[self.language]
-        menu = QMenu()
-        delete_action = menu.addAction(texts["delete"])
-        action = menu.exec(event.screenPos())
-        
-        if action == delete_action:
-            # Remove from generic connections list
-            if self in self.start_item.connections:
-                self.start_item.connections.remove(self)
-            if self in self.end_item.connections:
-                self.end_item.connections.remove(self)
-                
-            # Remove from interface-specific connections list
-            if self.interface_name:
-                if hasattr(self.start_item, 'connections_by_interface') and self.interface_name in self.start_item.connections_by_interface:
-                    if self in self.start_item.connections_by_interface[self.interface_name]:
-                        self.start_item.connections_by_interface[self.interface_name].remove(self)
-                
-                if hasattr(self.end_item, 'connections_by_interface') and self.interface_name in self.end_item.connections_by_interface:
-                    if self in self.end_item.connections_by_interface[self.interface_name]:
-                        self.end_item.connections_by_interface[self.interface_name].remove(self)
-                        
-            # Remove connection from scene
-            self.scene().removeItem(self)
-
-    def update_position(self):
-        start_point = self.start_item.sceneBoundingRect().center()
-        end_point = self.end_item.sceneBoundingRect().center()
-        self.setLine(start_point.x(), start_point.y(), end_point.x(), end_point.y())
-        if hasattr(self, 'text_item'):
-            self.update_text_position()
-    
-    def update_text_position(self):
-        line = self.line()
-        center = line.pointAt(0.5)
-        self.text_item.setPos(center.x(), center.y() - 15)

@@ -4,7 +4,7 @@ from PyQt6.QtGui import QBrush
 from PyQt6.QtWidgets import QGraphicsEllipseItem, QGraphicsRectItem, QDialog
 
 from model.translations import TRANSLATIONS
-from model.network_shape import MovableRect, MovableEllipse, ConnectionLine
+from model import MovableEllipse, MovableRect, ConnectionLine
 from controller.iface_select_dialog import InterfaceSelectionDialog
 
 
