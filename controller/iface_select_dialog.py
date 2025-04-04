@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QVBoxLayout, QDialog, QComboBox, QDialogButtonBox, QFrame, QLabel
 
-from prog.nodes import MovableRect
-from prog.translations import TRANSLATIONS
+from model.network_shape import MovableRect
+from model.translations import TRANSLATIONS
 
 
 class InterfaceSelectionDialog(QDialog):

@@ -1,9 +1,9 @@
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QPen, QFont
-from PyQt6.QtWidgets import QGraphicsEllipseItem, QGraphicsRectItem, QGraphicsLineItem, QGraphicsTextItem, QMenu, QDialog, QFormLayout, QLineEdit, QComboBox, QDialogButtonBox
+from PyQt6.QtGui import QFont, QPen
+from PyQt6.QtWidgets import QGraphicsTextItem, QMenu, QDialog, QGraphicsRectItem, QGraphicsEllipseItem, QGraphicsLineItem, QGraphicsTextItem, QMenu
 
-from prog.iface_properties_dialog import InterfacePropertiesDialog
-from prog.translations import TRANSLATIONS
+from controller.iface_properties_dialog import InterfacePropertiesDialog
+from model.translations import TRANSLATIONS
 
 
 class NetworkShape:
@@ -146,17 +146,6 @@ class NetworkShape:
         return connected
 
 
-class MovableEllipse(NetworkShape, QGraphicsEllipseItem):
-    def __init__(self, x, y, width, height, language="en"):
-        interfaces = [
-            {"name": "enp0s8", "ip": "automático", "netmask": "automático", "network": "automático", "gateway": "automático", "automatic": True}
-        ]
-        QGraphicsEllipseItem.__init__(self, x, y, width, height)
-        NetworkShape.__init__(self, interfaces, ip_forward=0, language=language)
-        self.connections = []
-        self.setZValue(1)
-
-
 class MovableRect(NetworkShape, QGraphicsRectItem):
     def __init__(self, x, y, width, height, language="en"):
         interfaces = [
@@ -174,6 +163,17 @@ class MovableRect(NetworkShape, QGraphicsRectItem):
         # Mantendo a lista genérica para compatibilidade
         self.connections = []
         
+        self.setZValue(1)
+
+
+class MovableEllipse(NetworkShape, QGraphicsEllipseItem):
+    def __init__(self, x, y, width, height, language="en"):
+        interfaces = [
+            {"name": "enp0s8", "ip": "automático", "netmask": "automático", "network": "automático", "gateway": "automático", "automatic": True}
+        ]
+        QGraphicsEllipseItem.__init__(self, x, y, width, height)
+        NetworkShape.__init__(self, interfaces, ip_forward=0, language=language)
+        self.connections = []
         self.setZValue(1)
 
 

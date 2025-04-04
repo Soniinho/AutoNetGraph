@@ -3,9 +3,9 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QBrush
 from PyQt6.QtWidgets import QGraphicsEllipseItem, QGraphicsRectItem, QDialog
 
-from prog.translations import TRANSLATIONS
-from prog.nodes import MovableEllipse, MovableRect, ConnectionLine
-from prog.iface_select_dialog import InterfaceSelectionDialog
+from model.translations import TRANSLATIONS
+from model.network_shape import MovableRect, MovableEllipse, ConnectionLine
+from controller.iface_select_dialog import InterfaceSelectionDialog
 
 
 def add_computer(scene, language):

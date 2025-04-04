@@ -1,5 +1,5 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
-from prog.visual_interface import Ui_DrawInterface  # Import the second interface
+from view.visual_interface import Ui_DrawInterface  # Import the second interface
 # import virtualbox
 
 # TODO: mudar projeto para MVC e design patterns

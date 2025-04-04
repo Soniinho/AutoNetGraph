@@ -1,8 +1,10 @@
 from PyQt6 import QtWidgets
 
-from prog.translations import TRANSLATIONS
-from prog.nodes import MovableRect, MovableEllipse
+from model.translations import TRANSLATIONS
+from model.network_shape import MovableRect, MovableEllipse
 
+
+#@ funcionando, necessário mais testes
 def setup_network(scene, language):
     translations = TRANSLATIONS
     texts = translations[language]
@@ -95,7 +97,7 @@ def setup_network(scene, language):
             
             # Determinar qual interface do nó atual e do nó conectado usar
             current_node_interface = interface_name
-            connected_node_interface = interface_name
+            connected_node_interface = 'enp0s8' if interface_name == 'enp0s3' else 'enp0s3'
             
             # Caso especial gateway-gateway
             if isinstance(current_node, MovableRect) and isinstance(connected_item, MovableRect):
@@ -192,5 +194,3 @@ def setup_network(scene, language):
             # Marca como configurado e adiciona à fila para processar seus vizinhos
             configured_nodes.add(connected_item)
             nodes_to_process.append((connected_item, None))
-    
-    return root_node
