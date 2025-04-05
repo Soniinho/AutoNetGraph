@@ -11,15 +11,15 @@ def setup_network(scene, language):
     # Get all nodes from the scene
     all_items = [item for item in scene.items() if isinstance(item, (MovableRect, MovableEllipse))]
    
-    # Find root node (MovableRect with connections only on enp0s8)
+    # Find root node (MovableRect with connections only on enp0s3)
     root_node = None
     for item in all_items:
         if isinstance(item, MovableRect):
-            has_enp0s8_only = False
+            has_enp0s3_only = False
             if hasattr(item, 'connections_by_interface'):
-                # Check if only enp0s8 has connections
-                if (len(item.connections_by_interface['enp0s8']) > 0 and
-                    len(item.connections_by_interface['enp0s3']) == 0):
+                # Check if only enp0s3 has connections
+                if (len(item.connections_by_interface['enp0s3']) > 0 and
+                    len(item.connections_by_interface['enp0s8']) == 0):
                     if root_node is None:  # First root found
                         root_node = item
                     else:  # Multiple roots found - error
@@ -30,15 +30,15 @@ def setup_network(scene, language):
         QtWidgets.QMessageBox.warning(None, texts["error_1"], texts["error_4"])
         return None
     
-    # Configure root node's enp0s8 interface
+    # Configure root node's enp0s3 interface
     for interface in root_node.interfaces:
-        if interface['name'] == 'enp0s8':
+        if interface['name'] == 'enp0s3':
             interface['automatic'] = False  # Certifique-se de definir como False
-            interface['ip'] = '192.168.0.1'
+            interface['ip'] = '192.168.1.1'
             interface['netmask'] = '255.255.255.0'
-            interface['network'] = '192.168.0.0'
-            #interface['gateway'] = '192.168.0.1'
-            interface['broadcast'] = '192.168.0.255'
+            interface['network'] = '192.168.1.0'
+            interface['gateway'] = '192.168.1.1'
+            interface['broadcast'] = '192.168.1.255'
             break
    
     # Update the displayed text
@@ -46,17 +46,17 @@ def setup_network(scene, language):
     
     # Mapa para acompanhar redes já configuradas
     network_map = {
-        '192.168.0.0': {
+        '192.168.1.0': {
             'next_ip': 2  # Começando pelo .2 pois .1 é o gateway
         }
     }
     
     # Contador para gerar novos IDs de rede
-    next_network_id = 1
+    next_network_id = 2
     
     # Mapa que associa um nó e uma interface a uma rede
     node_interface_network = {
-        (root_node, 'enp0s8'): '192.168.0.0'
+        (root_node, 'enp0s3'): '192.168.1.0'
     }
     
     # Configurar interfaces dos outros nós - começando pelo nó raiz
@@ -97,7 +97,7 @@ def setup_network(scene, language):
             
             # Determinar qual interface do nó atual e do nó conectado usar
             current_node_interface = interface_name
-            connected_node_interface = 'enp0s8' if interface_name == 'enp0s3' else 'enp0s3'
+            connected_node_interface = 'enp0s3' if interface_name == 'enp0s8' else 'enp0s8'
             
             # Caso especial gateway-gateway
             if isinstance(current_node, MovableRect) and isinstance(connected_item, MovableRect):
@@ -146,7 +146,7 @@ def setup_network(scene, language):
                                 break
                 
                 # Configurar outra interface com uma NOVA rede (importante!)
-                other_interface_name = 'enp0s3' if connected_node_interface == 'enp0s8' else 'enp0s8'
+                other_interface_name = 'enp0s8' if connected_node_interface == 'enp0s3' else 'enp0s3'
                 for other_interface in connected_item.interfaces:
                     if other_interface['name'] == other_interface_name:
                         # Se esta interface já está configurada, pular
@@ -160,6 +160,7 @@ def setup_network(scene, language):
                         other_interface['ip'] = next_ip
                         other_interface['netmask'] = '255.255.255.0'
                         other_interface['network'] = network
+                        other_interface['gateway'] = other_interface['ip']
                         other_interface['broadcast'] = broadcast
                         other_interface_updated = True
                         

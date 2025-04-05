@@ -23,12 +23,17 @@ class NetworkShape:
         # Constrói a exibição de informações
         texts = self.translations[self.language]
         info = ""
-        for iface in self.interfaces:
+
+        # Ordena as interfaces por nome
+        sorted_interfaces = sorted(self.interfaces, key=lambda x: x['name'])
+
+        for iface in sorted_interfaces:
             info += f"{texts['interface']} {iface['name']}:\n"
             for key, value in iface.items():
                 if key != "name":
                     info += f"  {texts.get(key, key).capitalize()}: {value}\n"
-        info += f"{texts['ip_forward']}: {self.ip_forward}\n"
+            info += f"\n"
+        # info += f"{texts['ip_forward']}: {self.ip_forward}\n"
         return info
 
     def contextMenuEvent(self, event):
@@ -61,21 +66,16 @@ class NetworkShape:
     def update_properties(self, dialog):
         texts = self.translations[self.language]
         for i, iface in enumerate(self.interfaces):
-            # Verifica o modo de configuração
             is_automatic = dialog.interface_edits[i]['config_mode'].currentText() == texts["automatic"]
             iface['automatic'] = is_automatic
 
-            # Somente atualiza os campos se estiver no modo "Manual"
             if not is_automatic:
                 iface['ip'] = dialog.interface_edits[i]['ip'].text()
                 iface['netmask'] = dialog.interface_edits[i]['netmask'].text()
                 iface['network'] = dialog.interface_edits[i]['network'].text()
-                if iface['name'] == "enp0s8":
-                    iface['gateway'] = dialog.interface_edits[i]['gateway_or_broadcast'].text()
-                else:
-                    iface['broadcast'] = dialog.interface_edits[i]['gateway_or_broadcast'].text()
-        
-        # Atualiza o texto exibido
+                iface['gateway'] = dialog.interface_edits[i]['gateway'].text()
+                iface['broadcast'] = dialog.interface_edits[i]['broadcast'].text()
+
         self.text_item.setPlainText(self.info_text())
 
     def mouseMoveEvent(self, event):

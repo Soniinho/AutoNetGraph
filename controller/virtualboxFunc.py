@@ -7,6 +7,7 @@ delay_2 = 4     # 2
 delay_3 = 8     # 5
 delay_4 = 40    # 30
 
+
 def generate_files(self):
         """ Ordenação pelo Z-Value: Os itens com valores de Z menores 
         aparecem antes no loop. Isso reflete a "profundidade" dos 
@@ -46,16 +47,17 @@ def generate_files(self):
                             file.write(f"iface {iface['name']} inet static\n")
                             
                             # Adiciona os campos conforme a interface
-                            if iface['name'] == "enp0s8":  # enp0s8 com campos padrão e gateway opcional
+                            if iface['name'] == "enp0s3":  # enp0s3 com campos padrão e gateway opcional
                                 file.write(f"    address {iface.get('ip', '')}\n")
                                 file.write(f"    netmask {iface.get('netmask', '')}\n")
                                 file.write(f"    network {iface.get('network', '')}\n")
-                                if 'gateway' in iface:
-                                    file.write(f"    gateway {iface.get('gateway', '')}\n")
-                            elif iface['name'] == "enp0s3":  # enp0s3 com broadcast adicional
+                                file.write(f"    gateway {iface.get('gateway', '')}\n")
+                                file.write(f"    broadcast {iface.get('broadcast', '')}\n")
+                            elif iface['name'] == "enp0s8":  # enp0s8 com broadcast adicional
                                 file.write(f"    address {iface.get('ip', '')}\n")
                                 file.write(f"    netmask {iface.get('netmask', '')}\n")
                                 file.write(f"    network {iface.get('network', '')}\n")
+                                file.write(f"    gateway {iface.get('gateway', '')}\n")
                                 file.write(f"    broadcast {iface.get('broadcast', '')}\n")
                             
                             file.write("\n")  # Separador entre as interfaces           
@@ -103,12 +105,16 @@ def cloneConfigureMachines(selected_vm, scene):
 
             # Escreve o arquivo Interface
             startInterfaceFile(keyboard)
-            makeInterfaceFile(keyboard,item)
+            nat = makeInterfaceFile(keyboard,item)
             saveInterfaceFile(keyboard)
 
             # Define como true se for um gateway
             if item.ip_forward == 1:
                 keyboard.put_keys('echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf\n')
+
+            # Adiciona o NAT
+            if nat == True:
+                keyboard.put_keys("iptables -F \niptables -t nat -F \niptables -t mangle -F \niptables -X \niptables -t nat -A POSTROUTING -o enp0s8 -j MASQUERADE\n")
 
             # Define o teclado de volta para BR
             keyboard.put_keys("setxkbmap br\n")
@@ -120,6 +126,8 @@ def cloneConfigureMachines(selected_vm, scene):
 
             # Fecha a sessão
             session.unlock_machine()
+
+    print("Done.")
 
 def cloneMachine(vbox, source_vm, selected_vm, machine_name_comp):
     clone_name = f"{selected_vm} {machine_name_comp}"
@@ -190,6 +198,8 @@ def startInterfaceFile(keyboard):
     keyboard.put_keys("iface lo inet loopback\n\n")
 
 def makeInterfaceFile(keyboard, item):
+    nat = False
+    
     # Itera sobre cada interface
     for iface in item.interfaces:
         # Especifica a interface como `auto` para habilitação
@@ -202,19 +212,30 @@ def makeInterfaceFile(keyboard, item):
             keyboard.put_keys(f"iface {iface['name']} inet static\n")
             
             # Adiciona os campos conforme a interface
-            if iface['name'] == "enp0s8":  # enp0s8 com campos padrão e gateway opcional
+            if iface['name'] == "enp0s3":
                 keyboard.put_keys(f"    address {iface.get('ip', '')}\n")
                 keyboard.put_keys(f"    netmask {iface.get('netmask', '')}\n")
                 keyboard.put_keys(f"    network {iface.get('network', '')}\n")
-                if 'gateway' in iface:
+
+                if iface['gateway'] != iface['ip']:
                     keyboard.put_keys(f"    gateway {iface.get('gateway', '')}\n")
-            elif iface['name'] == "enp0s3":  # enp0s3 com broadcast adicional
+                else:
+                    nat = True
+
+                #keyboard.put_keys(f"    broadcast {iface.get('broadcast', '')}\n")
+
+            elif iface['name'] == "enp0s8":
                 keyboard.put_keys(f"    address {iface.get('ip', '')}\n")
                 keyboard.put_keys(f"    netmask {iface.get('netmask', '')}\n")
                 keyboard.put_keys(f"    network {iface.get('network', '')}\n")
-                keyboard.put_keys(f"    broadcast {iface.get('broadcast', '')}\n")
+                if iface['gateway'] != iface['ip']:
+                    keyboard.put_keys(f"    gateway {iface.get('gateway', '')}\n")
+
+                #keyboard.put_keys(f"    broadcast {iface.get('broadcast', '')}\n")
             
             keyboard.put_keys("\n")  # Separador entre as interfaces
+
+    return nat
 
 def saveInterfaceFile(keyboard):
     keyboard.put_keys(hold_keys=["CTRL"], press_keys=["o"])
