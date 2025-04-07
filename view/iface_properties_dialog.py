@@ -1,9 +1,9 @@
 from PyQt6.QtWidgets import QDialog, QFormLayout, QLineEdit, QComboBox, QDialogButtonBox
 
-from model.translations import TRANSLATIONS
+from model.translations_md import TRANSLATIONS
 
 
-class InterfacePropertiesDialog(QDialog):
+class Ui_InterfacePropertiesDialog(QDialog):
     def __init__(self, shape, language="en"):
         super().__init__()
         self.language = language

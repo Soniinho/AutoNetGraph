@@ -1,8 +1,8 @@
 from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import QGraphicsTextItem, QMenu, QDialog, QGraphicsTextItem, QMenu
 
-from controller.iface_properties_dialog import InterfacePropertiesDialog
-from model.translations import TRANSLATIONS
+from view.iface_properties_dialog import Ui_InterfacePropertiesDialog
+from .translations_md import TRANSLATIONS
 
 
 class NetworkShape:
@@ -59,7 +59,7 @@ class NetworkShape:
             self.scene().removeItem(self)
 
     def show_properties_dialog(self):
-        dialog = InterfacePropertiesDialog(self, self.language)
+        dialog = Ui_InterfacePropertiesDialog(self, self.language)
         if dialog.exec() == QDialog.DialogCode.Accepted:
             self.update_properties(dialog)
 

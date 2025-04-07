@@ -1,18 +1,16 @@
 from PyQt6 import QtWidgets
 from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView, QPushButton, QHBoxLayout, QVBoxLayout
 
-from model.translations import TRANSLATIONS
-from controller.virtualboxFunc import cloneConfigureMachines
-from controller.diagram_operations import add_computer, add_gateway, add_connect
-from controller.network_operations import setup_network
-from controller.file_operations import save_diagram, load_diagram
+from model.translations_md import TRANSLATIONS
+from controller import NetworkItemController, NetworkOperationsController, FileOperationsController, VirtualBoxManualController
 
 
-class Ui_DrawInterface(object):
+class Ui_VisualInterface(object):
     def __init__(self, selected_vm, language="en"):
         self.selected_vm = selected_vm
         self.language = language
         self.translations = TRANSLATIONS
+        self.controller1 = None
 
     def setupUi(self, DiagramWindow):
         texts = self.translations[self.language]
@@ -60,26 +58,30 @@ class Ui_DrawInterface(object):
 
         # Setup Scene
         self.scene = QGraphicsScene()
+        self.controller1 = NetworkItemController(self.scene, self.language)
+        self.controller2 = FileOperationsController(self.scene, self.language)
+        self.controller3 = NetworkOperationsController(self.scene, self.language)
+        self.controller4 = VirtualBoxManualController(self.scene, self.selected_vm)
         self.scene.setSceneRect(0, 0, 700, 500)
         self.graphicsView.setScene(self.scene)
         self.graphicsView.setRenderHint(self.graphicsView.renderHints().Antialiasing)
         self.graphicsView.setViewportUpdateMode(QGraphicsView.ViewportUpdateMode.FullViewportUpdate)
 
         # Connect button signals
-        self.button_computer.clicked.connect(lambda: add_computer(self.scene, self.language))
-        self.button_gateway.clicked.connect(lambda: add_gateway(self.scene, self.language))
-        self.button_connect.clicked.connect(lambda: add_connect(self.scene, self.language))
-        self.button_clone_machines.clicked.connect(lambda: cloneConfigureMachines(self.selected_vm, self.scene))
-        self.button_setup_network.clicked.connect(lambda: setup_network(self.scene, self.language))
-        self.button_save.clicked.connect(lambda: save_diagram(self.scene))
-        self.button_load.clicked.connect(lambda: load_diagram(self.scene, self.language))
+        self.button_computer.clicked.connect(self.controller1.add_computer)
+        self.button_gateway.clicked.connect(self.controller1.add_gateway)
+        self.button_connect.clicked.connect(self.controller1.add_connection)
+        self.button_clone_machines.clicked.connect(self.controller4.cloneConfigureMachines)
+        self.button_setup_network.clicked.connect(self.controller3.setup_network)
+        self.button_save.clicked.connect(self.controller2.save_diagram)
+        self.button_load.clicked.connect(self.controller2.load_diagram)
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     DrawWindow = QtWidgets.QMainWindow()
-    ui = Ui_DrawInterface(selected_vm="VM1")
+    ui = Ui_VisualInterface(selected_vm="VM1")
     ui.setupUi(DrawWindow)
     DrawWindow.show()
     sys.exit(app.exec())

@@ -2,7 +2,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPen
 from PyQt6.QtWidgets import QGraphicsTextItem, QMenu, QGraphicsLineItem, QGraphicsTextItem, QMenu
 
-from model.translations import TRANSLATIONS
+from .translations_md import TRANSLATIONS
 
 
 class ConnectionLine(QGraphicsLineItem):

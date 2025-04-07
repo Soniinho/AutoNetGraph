@@ -1,8 +1,8 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
-from view.visual_interface import Ui_DrawInterface  # Import the second interface
+from view.visual_interface import Ui_VisualInterface  # Import the second interface
 # import virtualbox
 
-# TODO: mudar projeto para MVC e design patterns
+#% A classe virtuabox inicia a API, deve comentar as linhas para testar
 class Ui_MainWindow(object):
     def __init__(self):
         self.language = "br"  # Default language is Portuguese
@@ -106,7 +106,7 @@ class Ui_MainWindow(object):
             self.selected_vm_name = selected_vm
 
             # Instantiate and load the new window in the same MainWindow
-            self.ui_second = Ui_DrawInterface(selected_vm, self.language)
+            self.ui_second = Ui_VisualInterface(selected_vm, self.language)
             self.ui_second.setupUi(MainWindow)  # Reuse the main window
 
             # Center the MainWindow on the screen

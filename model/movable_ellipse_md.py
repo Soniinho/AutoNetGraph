@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QGraphicsEllipseItem
 
-from .network_shape import NetworkShape
+from .network_shape_md import NetworkShape
 
 
 class MovableEllipse(NetworkShape, QGraphicsEllipseItem):

@@ -1,10 +1,10 @@
 from PyQt6.QtWidgets import QVBoxLayout, QDialog, QComboBox, QDialogButtonBox, QFrame, QLabel
 
 from model import MovableRect
-from model.translations import TRANSLATIONS
+from model.translations_md import TRANSLATIONS
 
 
-class InterfaceSelectionDialog(QDialog):
+class Ui_InterfaceSelectionDialog(QDialog):
     def __init__(self, gateway1, gateway2=None, language="en"):
         super().__init__()
         self.language = language
