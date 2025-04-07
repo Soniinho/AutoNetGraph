@@ -2,7 +2,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 from view.visual_interface import Ui_VisualInterface  # Import the second interface
 # import virtualbox
 
-#% A classe virtuabox inicia a API, deve comentar as linhas para testar
+#% A classe virtuabox inicia a API, deve comentar as 2 linhas para testar sem ela
 class Ui_MainWindow(object):
     def __init__(self):
         self.language = "br"  # Default language is Portuguese
