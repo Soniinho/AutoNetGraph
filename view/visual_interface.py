@@ -11,6 +11,9 @@ class Ui_VisualInterface(object):
         self.language = language
         self.translations = TRANSLATIONS
         self.controller1 = None
+        self.controller2 = None
+        self.controller3 = None
+        self.controller4 = None
 
     def setupUi(self, DiagramWindow):
         texts = self.translations[self.language]

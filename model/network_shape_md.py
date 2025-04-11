@@ -12,7 +12,7 @@ class NetworkShape:
         self.ip_forward = ip_forward
         self.language = language
         
-        self.translations = TRANSLATIONS  # Use centralized translations
+        self.translations = TRANSLATIONS
 
         # Exibe as informações ao lado da forma
         self.text_item = QGraphicsTextItem(self.info_text(), self)
@@ -25,7 +25,7 @@ class NetworkShape:
         info = ""
 
         # Ordena as interfaces por nome
-        sorted_interfaces = sorted(self.interfaces, key=lambda x: x['name'])
+        sorted_interfaces = sorted(self.interfaces, key=lambda x: x['name'], reverse=True)
 
         for iface in sorted_interfaces:
             info += f"{texts['interface']} {iface['name']}:\n"
@@ -122,7 +122,7 @@ class NetworkShape:
             for interface, connections in self.connections_by_interface.items():
                 for conn in connections:
                     connected_item = conn.end_item if conn.start_item == self else conn.start_item
-                    # Para conexões entre gateways, extract a interface correta do formato "iface1 <-> iface2"
+                    # Para conexões entre gateways, extrai a interface correta do formato "iface1 <-> iface2"
                     interface_name = conn.interface_name
                     if ' <-> ' in interface_name:
                         parts = interface_name.split(' <-> ')
@@ -135,7 +135,6 @@ class NetworkShape:
                     item_entry = (connected_item, interface_name)
                     if item_entry not in connected:
                         connected.append(item_entry)
-        # Método antigo para compatibilidade
         else:
             for conn in self.connections:
                 if conn.start_item == self:

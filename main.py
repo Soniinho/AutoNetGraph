@@ -120,7 +120,7 @@ class Ui_MainWindow(object):
     def change_language(self):
         """Change the language based on the dropdown selection."""
         index = self.language_dropdown.currentIndex()
-        self.language = "pt" if index == 0 else "en"
+        self.language = "br" if index == 0 else "en"
         self.retranslateUi(MainWindow)
 
 
