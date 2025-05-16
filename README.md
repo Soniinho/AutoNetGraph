@@ -23,6 +23,6 @@ Written by Matheus H. Daltroso.
 
 5) Nodes can be connected by selecting 2 of them with CTRL + left mouse button. After clicking the "Connect" button, a window will open allowing you to choose the interface to be connected. You can also delete the connection by right-clicking on it.
 
-6) You can also configure the network automatically, but for that you must have a root node gateway, which should only have connections using the enp0s3 interface. All nodes must be connected to someone, and the remaining gateways must have connections on both interfaces.
+6) You can also configure the network automatically, but for that you must have a root node gateway, which should only have connections using the enp0s3 interface.
 
 7) Finally, you can click "Clone Machines" to start the cloning process and network address configuration, the function will configure all the nodes, cloning one machine at a time, starting it, configuring it and then shutting it down.
