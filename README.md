@@ -1,28 +1,143 @@
 # AutoNetGraph
-This is an app that lets you clone virtual machines and set up their network addresses automatically using a graphical interface.
-Written by Matheus H. Daltroso.
 
-## SETUP:
-1) This was written in Python 3.11.1. Install page here: https://www.python.org/downloads/release/python-3111/
+![Python](https://img.shields.io/badge/Python-3.11.1-blue)
+![VirtualBox](https://img.shields.io/badge/VirtualBox-6.1.14-orange)
+![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux-green)
+![License](https://img.shields.io/badge/License-MIT-yellow)
+![Status](https://img.shields.io/badge/Status-Completed-success)
+![TCC](https://img.shields.io/badge/Project-TCC-purple)
 
-2) In order to use this app, you will need to install VirtualBox version 6.1.14 (the last version supported by the package "virtualbox"). You will also need to download the SDK and extract it into the project folder. Install page here: https://download.virtualbox.org/virtualbox/6.1.14/
+Projeto desenvolvido como Trabalho de Conclusão de Curso (TCC) com o objetivo de automatizar a criação e configuração de ambientes virtuais de rede utilizando o VirtualBox.
 
-3) You will need a linux virtual machine on VirtualBox with 2 interfaces on Bridge mode, the configuration process works by login on the machine with the root user, (default being user:root password:root). It is configured by changing the keyboard layout to "us", typing everything, changing it back to "br" and then powering off the machine. You can change these on the virtualbox_manual_ct.py file.
+O AutoNetGraph permite construir topologias de rede através de uma interface gráfica, clonar máquinas virtuais automaticamente e configurar seus endereços de rede sem necessidade de configuração manual em cada máquina.
 
-4) Run `generate-environment.bat` on Windows or `generate-environment.sh` on Linux to generate the virtual environment and install all the modules, including the VirtualBox SDK.
+---
 
-## Using the App
+## Funcionalidades
 
-1) Run main.py.
+- Criação visual de topologias de rede.
+- Nós do tipo Computador e Gateway.
+- Conexão gráfica entre dispositivos.
+- Clonagem automática de máquinas virtuais.
+- Configuração automática de endereços IP.
+- Automatização de laboratórios virtuais.
 
-2) Once it's running, select a virtual machine from the list and click "Select Machine."
+---
 
-3) After that, a new window will open where you can choose to create a "Computer" or a "Gateway." You can connect them by selecting them simultaneously and clicking "Connect."
+## Tecnologias Utilizadas
 
-4) After creating a "Computer" or "Gateway," right-click to open a menu where you can edit the node's properties or delete it. Nodes can also be moved by selecting them with the left mouse button and dragging them.
+- Python 3.11.1
+- VirtualBox 6.1.14
+- VirtualBox SDK
+- PyQt6
+- PyVbox / virtualbox
 
-5) Nodes can be connected by selecting 2 of them with CTRL + left mouse button. After clicking the "Connect" button, a window will open allowing you to choose the interface to be connected. You can also delete the connection by right-clicking on it.
+---
 
-6) You can also configure the network automatically, but for that you must have a root node gateway, which should only have connections using the enp0s3 interface.
+## Requisitos
 
-7) Finally, you can click "Clone Machines" to start the cloning process and network address configuration, the function will configure all the nodes, cloning one machine at a time, starting it, configuring it and then shutting it down.
+### Python
+
+O projeto foi desenvolvido utilizando Python 3.11.1:
+
+https://www.python.org/downloads/release/python-3111/
+
+### VirtualBox
+
+É necessário utilizar a versão 6.1.14 do VirtualBox, última versão compatível com a biblioteca utilizada pelo projeto:
+
+https://download.virtualbox.org/virtualbox/6.1.14/
+
+### Máquina Virtual Base
+
+Para utilizar o sistema é necessário possuir uma máquina virtual Linux configurada no VirtualBox com:
+
+- Duas interfaces de rede em modo Bridge.
+- Acesso ao usuário root.
+
+---
+
+## Instalação
+
+### Windows
+
+```cmd
+generate-environment.bat
+```
+
+### Linux
+
+```bash
+chmod +x generate-environment.sh
+./generate-environment.sh
+```
+
+Os scripts criam automaticamente o ambiente virtual e instalam todas as dependências necessárias para execução do projeto.
+
+---
+
+## Como Utilizar
+
+Execute a aplicação:
+
+```bash
+python main.py
+```
+
+Fluxo básico:
+
+1. Selecione uma máquina virtual base.
+2. Crie computadores e gateways na interface gráfica.
+3. Conecte os dispositivos desejados.
+4. Configure a topologia da rede.
+5. Clique em **Clone Machines**.
+6. O sistema irá clonar e configurar automaticamente todas as máquinas da topologia.
+
+---
+
+## Exemplo de Topologia
+
+O diretório `examples/` contém exemplos de topologias que podem ser carregadas diretamente pela aplicação.
+
+---
+
+## Limitações
+
+- Requer VirtualBox 6.1.14 devido à compatibilidade da biblioteca PyVbox.
+- Atualmente suporta máquinas Linux previamente configuradas.
+- A configuração automática depende de acesso root à máquina virtual base.
+- O processo de configuração foi desenvolvido e testado utilizando interfaces de rede em modo Bridge.
+
+---
+
+## Capturas de Tela
+
+### Interface Principal
+
+![Interface](./docs/interface.png)
+
+### Exemplo de Topologia
+
+![Topology](./docs/topology.png)
+
+---
+
+## Status do Projeto
+
+✅ Projeto concluído.
+
+Desenvolvido como Trabalho de Conclusão de Curso e disponibilizado para fins de estudo, demonstração e consulta.
+
+---
+
+## Licença
+
+Este projeto está licenciado sob a Licença MIT.
+
+Consulte o arquivo `LICENSE` para mais informações.
+
+---
+
+## Autor
+
+Matheus Henrique Daltroso
