@@ -1,28 +1,101 @@
+![Python](https://img.shields.io/badge/Python-3.11-blue)
+![License](https://img.shields.io/badge/License-MIT-green)
 # AutoNetGraph
-This is an app that lets you clone virtual machines and set up their network addresses automatically using a graphical interface.
-Written by Matheus H. Daltroso.
 
-## SETUP:
-1) This was written in Python 3.11.1. Install page here: https://www.python.org/downloads/release/python-3111/
+AutoNetGraph is a desktop application developed in Python that automates virtual machine cloning and network configuration through a graphical interface integrated with VirtualBox.
 
-2) In order to use this app, you will need to install VirtualBox version 6.1.14 (the last version supported by the package "virtualbox"). You will also need to download the SDK and extract it into the project folder. Install page here: https://download.virtualbox.org/virtualbox/6.1.14/
+The project was created as a Computer Science graduation thesis focused on simplifying the creation of virtual network topologies for educational, testing and laboratory environments.
 
-3) You will need a linux virtual machine on VirtualBox with 2 interfaces on Bridge mode, the configuration process works by login on the machine with the root user, (default being user:root password:root). It is configured by changing the keyboard layout to "us", typing everything, changing it back to "br" and then powering off the machine. You can change these on the virtualbox_manual_ct.py file.
+---
 
-4) Run `generate-environment.bat` on Windows or `generate-environment.sh` on Linux to generate the virtual environment and install all the modules, including the VirtualBox SDK.
+## Features 🚀
 
-## Using the App
+- Graphical network topology editor
+- Automated virtual machine cloning
+- Automatic network address configuration
+- VirtualBox integration using SDK/API
+- Gateway and node management
+- Interface-based network connections
+- Linux virtual machine provisioning workflow
 
-1) Run main.py.
+---
 
-2) Once it's running, select a virtual machine from the list and click "Select Machine."
+## Technologies 🛠️
 
-3) After that, a new window will open where you can choose to create a "Computer" or a "Gateway." You can connect them by selecting them simultaneously and clicking "Connect."
+- Python
+- PyQt6
+- VirtualBox SDK
 
-4) After creating a "Computer" or "Gateway," right-click to open a menu where you can edit the node's properties or delete it. Nodes can also be moved by selecting them with the left mouse button and dragging them.
+## Concepts
 
-5) Nodes can be connected by selecting 2 of them with CTRL + left mouse button. After clicking the "Connect" button, a window will open allowing you to choose the interface to be connected. You can also delete the connection by right-clicking on it.
+- Virtualization
+- Network topology
+- Infrastructure automation
+- Linux networking
 
-6) You can also configure the network automatically, but for that you must have a root node gateway, which should only have connections using the enp0s3 interface.
+## Motivation
 
-7) Finally, you can click "Clone Machines" to start the cloning process and network address configuration, the function will configure all the nodes, cloning one machine at a time, starting it, configuring it and then shutting it down.
+Managing and configuring multiple virtual machines manually for networking and infrastructure laboratories can be repetitive and error-prone.
+
+AutoNetGraph was created to simplify this process through infrastructure automation and a visual topology editor.
+
+---
+
+## Screenshots 📸
+
+### Main Interface
+![Main Interface](images/interface.png)
+
+### Network Topology Example
+![Topology](images/topology.png)
+
+## Demo
+
+The following example demonstrates the creation of a virtual network topology and automatic machine configuration.
+
+![Demo](images/demo.gif)
+
+---
+
+## How It Works
+
+1. The user selects a base virtual machine from VirtualBox
+2. Nodes and gateways can be created through the graphical interface
+3. Connections between nodes are defined visually
+4. The application clones the virtual machines automatically
+5. Network interfaces and IP addresses are configured
+6. Machines are initialized and configured sequentially
+
+## Setup ⚙️
+
+### Requirements
+
+- Python 3.11+
+- VirtualBox 6.1.14 (https://download.virtualbox.org/virtualbox/6.1.14/)
+- VirtualBox SDK 6.1.14
+- Linux virtual machine configured in bridge mode
+
+### Clone Repository
+
+```bash
+git clone https://github.com/Soniinho/AutoNetGraph
+cd AutoNetGraph
+```
+
+### Create Environment
+
+#### Linux
+```bash
+./generate-environment.sh
+```
+
+#### Windows
+```bash
+generate-environment.bat
+```
+
+#### Run Application
+
+```bash
+python main.py
+```
